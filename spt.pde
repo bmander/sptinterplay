@@ -47,7 +47,22 @@ class Way{
     }
   }
   
+  String metadata(String key){
+    try{
+      return wayinfo.getString( key );
+    } catch (JSONException ex){
+      return null;
+    }
+  }
+  
   void draw(double left, double bottom, double scalex, double scaley){
+    if( this.metadata("highway").equals("motorway") ){
+      strokeWeight(1);
+    } else{
+      strokeWeight(0.1);
+    }
+    //println( this.metadata( "highway" ) );
+    
     for(int i=0; i<this.loc.size()-1; i++){
       Point pt1 = (Point)this.loc.get(i);
       Point pt2 = (Point)this.loc.get(i+1);
@@ -64,17 +79,7 @@ class Way{
 
 class Tile{
   String id;
-  HashMap wayinfo;
   ArrayList ways;
-  
-  private void setWayInfo( JSONObject wayinfo ) throws JSONException{
-    Iterator keys = wayinfo.keys();
-    while(keys.hasNext()){
-      String key = (String)keys.next();
-      JSONObject val = wayinfo.getJSONObject( key );
-      this.wayinfo.put( key, val );
-    }
-  }
   
   private void setWays( JSONArray ways, JSONObject wayinfo ) throws JSONException{
     for(int i=0; i<ways.length(); i++){
@@ -85,7 +90,6 @@ class Tile{
   }
   
   Tile(String filename){
-    this.wayinfo = new HashMap();
     this.ways = new ArrayList();
     
     try{
@@ -102,7 +106,6 @@ class Tile{
       // get wayinfo, ways
       JSONObject value = data.getJSONObject( "value" );
       JSONObject wayinfo = value.getJSONObject( "wayinfo" );
-      this.setWayInfo( value.getJSONObject( "wayinfo" ) );
       this.setWays( value.getJSONArray( "ways" ), wayinfo );
     } catch (JSONException ex){
       println( ex );
