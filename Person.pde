@@ -16,6 +16,12 @@ class Person{
     this.moved=true;
   }
   
+  void update(int x, int y){
+    this.x=x;
+    this.y=y;
+    this.moved=true;
+  }
+  
   void draw(float transx,float transy,float scalex,float scaley){
     strokeWeight(1);
     stroke(0);
