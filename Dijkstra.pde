@@ -88,35 +88,35 @@ class Dijkstra{
       return;
     }
     
-    DjQueueNode best_edge = (DjQueueNode)this.queue.remove();
+    DjQueueNode best_edge_pq_node = (DjQueueNode)this.queue.remove();
     
-    //println( "best edge from "+best_edge.edge.orig+" to "+best_edge.edge.dest+"("+best_edge.weight+")" );
-    if( tree.containsKey( best_edge.edge.dest ) ){
+    //println( "best edge from "+best_edge_pq_node.edge.orig+" to "+best_edge_pq_node.edge.dest+"("+best_edge_pq_node.weight+")" );
+    if( tree.containsKey( best_edge_pq_node.edge.dest ) ){
       //println( "already found a better route" );
       //println( "---" );
       return;
     }
     
-    tree.put( best_edge.edge.dest, 
+    tree.put( best_edge_pq_node.edge.dest, 
               new SPTEdge( 
-                best_edge.edge.orig, 
-                best_edge.weight, 
-                best_edge.edge.edgeweight, 
+                best_edge_pq_node.edge.orig, 
+                best_edge_pq_node.weight, 
+                best_edge_pq_node.edge.edgeweight, 
                 0, 
-                best_edge.edge.way 
+                best_edge_pq_node.edge.way 
               ) 
             );
               
     //draw the edge
-    if( best_edge.edge.way != null ){
+    if( best_edge_pq_node.edge.way != null ){
       stroke(#000000);
-      best_edge.edge.draw(transx,transy,scalex,scaley);
+      best_edge_pq_node.edge.draw(transx,transy,scalex,scaley);
     }
     //trace up the tree adding the edge weight
     
     
     //for each outgoing edge
-    ArrayList outgoing = graph.getadj( best_edge.edge.dest );
+    ArrayList outgoing = graph.getadj( best_edge_pq_node.edge.dest );
     if(outgoing==null){
       return;
     }
@@ -135,15 +135,15 @@ class Dijkstra{
       
       //stroke(#ff0000);
       //candidate_edge.data.draw(transx,transy,scalex,scaley,2);
-      //println( "added to queue with weight "+(best_edge.weight+cand_edge_weight) );
+      //println( "added to queue with weight "+(best_edge_pq_node.weight+cand_edge_weight) );
       this.queue.add( new DjQueueNode( 
                         new SPTEdge(
-                          best_edge.edge.dest,
+                          best_edge_pq_node.edge.dest,
                           candidate_edge.tov,
                           candidate_edge.way,
                           cand_edge_weight), 
                         candidate_edge.tov, 
-                        best_edge.weight+cand_edge_weight
+                        best_edge_pq_node.weight+cand_edge_weight
                       ) 
                     );
     }
