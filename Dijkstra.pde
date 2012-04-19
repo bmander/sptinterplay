@@ -1,18 +1,9 @@
 class SPTEdge{
   Edge edge;
-  float edgeweight=0;
-  float weight;
   float trunkyness=0;
   
-  SPTEdge(Edge edge, float edgeweight){
+  SPTEdge(Edge edge){
     this.edge=edge;
-    //this.edgeweight=edgeweight;
-  }
-  
-  SPTEdge(Edge edge, float weight, float trunkyness){
-    this.edge=edge;
-    this.weight=weight;
-    this.trunkyness=trunkyness;
   }
   
   String toString(){
@@ -69,8 +60,7 @@ class Dijkstra{
     this.queue.add( 
       new DjQueueNode( 
         new SPTEdge(
-          new Edge(null,startnode,null),
-          0), 
+          new Edge(null,startnode,null)), 
         startnode, 
         0 
       ) 
@@ -92,11 +82,7 @@ class Dijkstra{
     }
     
     tree.put( best_edge_pq_node.edge.edge.tov, 
-              new SPTEdge( 
-                best_edge_pq_node.edge.edge,
-                best_edge_pq_node.weight, 
-                0
-              ) 
+              new SPTEdge( best_edge_pq_node.edge.edge ) 
             );
               
     //draw the edge
@@ -129,9 +115,7 @@ class Dijkstra{
       //candidate_edge.data.draw(transx,transy,scalex,scaley,2);
       //println( "added to queue with weight "+(best_edge_pq_node.weight+cand_edge_weight) );
       this.queue.add( new DjQueueNode( 
-                        new SPTEdge(
-                          candidate_edge,
-                          cand_edge_weight), 
+                        new SPTEdge( candidate_edge ), 
                         candidate_edge.tov, 
                         best_edge_pq_node.weight+cand_edge_weight
                       ) 
