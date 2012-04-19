@@ -19,12 +19,10 @@ class SPTEdge{
 
 class DjQueueNode implements Comparable{
   SPTEdge edge;
-  String startnode;
   float weight;
   
-  DjQueueNode(SPTEdge edge, String startnode, float weight){
+  DjQueueNode(SPTEdge edge, float weight){
     this.edge=edge;
-    this.startnode=startnode;
     this.weight=weight;
   }
   
@@ -61,7 +59,6 @@ class Dijkstra{
       new DjQueueNode( 
         new SPTEdge(
           new Edge(null,startnode,null)), 
-        startnode, 
         0 
       ) 
     );
@@ -116,7 +113,6 @@ class Dijkstra{
       //println( "added to queue with weight "+(best_edge_pq_node.weight+cand_edge_weight) );
       this.queue.add( new DjQueueNode( 
                         new SPTEdge( candidate_edge ), 
-                        candidate_edge.tov, 
                         best_edge_pq_node.weight+cand_edge_weight
                       ) 
                     );
