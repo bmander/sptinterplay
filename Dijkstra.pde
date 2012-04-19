@@ -2,7 +2,7 @@ class SPTEdge{
   String orig;
   String dest;
   Way way;
-  float edgeweight;
+  float edgeweight=0;
   float weight;
   float trunkyness;
   
@@ -23,6 +23,10 @@ class SPTEdge{
   
   String toString(){
     return orig+"->"+dest;
+  }
+  
+  void draw(float transx, float transy, float scalex, float scaley){
+    this.way.draw(transx,transy,scalex,scaley,2);
   }
 }
 
@@ -106,7 +110,7 @@ class Dijkstra{
     //draw the edge
     if( best_edge.edge.way != null ){
       stroke(#000000);
-      best_edge.edge.way.draw(transx,transy,scalex,scaley,2);
+      best_edge.edge.draw(transx,transy,scalex,scaley);
     }
     //trace up the tree adding the edge weight
     
@@ -152,7 +156,7 @@ class Dijkstra{
     for(Object item : this.tree.values()){
       SPTEdge edge = (SPTEdge)item;
       if(edge.way!=null){
-        edge.way.draw(transx,transy,scalex,scaley,2);
+        edge.draw(transx,transy,scalex,scaley);
       }
     }
   }

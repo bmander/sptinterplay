@@ -31,12 +31,12 @@ void setup(){
   transy=42.336;
   
   map = new Map();
-  String[] filenames = {"-71.04-42.36.json",
-    "-71.04-42.34.json",
-    "-71.06-42.36.json",
+  String[] filenames = {//"-71.04-42.36.json",
+    //"-71.04-42.34.json",
+    //"-71.06-42.36.json",
     "-71.06-42.34.json", //this one
-    "-71.08-42.36.json",
-    "-71.08-42.34.json"
+    //"-71.08-42.36.json",
+    //"-71.08-42.34.json"
   };
   for(int i=0; i<filenames.length; i++){
     print(i+"...");
