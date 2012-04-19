@@ -41,3 +41,35 @@ class Tile{
   }
   
 }
+
+class Map{
+  ArrayList tiles;
+  
+  Map(){
+    tiles = new ArrayList();
+  }
+  
+  void addTile(Tile tile){
+    tiles.add( tile );
+  }
+  
+  void addTile(String filename){
+    Tile tile = new Tile(filename);
+    this.addTile(tile);
+  }
+  
+  Graph toGraph(){
+    Graph gg = new Graph();
+    for(int i=0; i<this.tiles.size(); i++){
+      gg.add( (Tile)this.tiles.get(i) );
+    }
+    return gg;
+  }
+  
+  void draw(float transx, float transy, int scalex, int scaley){
+    for(int i=0; i<tiles.size(); i++){
+      ((Tile)tiles.get(i)).draw(transx,transy,scalex,scaley);
+    }
+  }
+  
+}

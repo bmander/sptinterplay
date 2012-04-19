@@ -20,14 +20,9 @@ int scaley;
 float transx;
 float transy;
 ArrayList tiles = new ArrayList();
+Map map;
 Graph graph;
 Dijkstra dijkstra;
-
-void drawtiles(float transx, float transy, int scalex, int scaley){
-  for(int i=0; i<tiles.size(); i++){
-    ((Tile)tiles.get(i)).draw(transx,transy,scalex,scaley);
-  }
-}
 
 void setup(){
   size(1536,1024);
@@ -42,6 +37,7 @@ void setup(){
   transx=-71.065;
   transy=42.336;
   
+  map = new Map();
   String[] filenames = {"-71.04-42.36.json",
     "-71.04-42.34.json",
     "-71.06-42.36.json",
@@ -51,16 +47,15 @@ void setup(){
   };
   for(int i=0; i<filenames.length; i++){
     print(i+"...");
-    Tile tile = new Tile(filenames[i]);
-    graph.add( tile );
-    tiles.add( tile );
+    map.addTile( filenames[i] );
     println( "done" );
   }
   
+  graph = map.toGraph();
   dijkstra = new Dijkstra( graph, "1330264333" );
   
   background(255);
-  drawtiles(transx,transy,scalex,scaley);
+  map.draw(transx,transy,scalex,scaley);
   
   println( graph.adj );
   
@@ -78,7 +73,7 @@ void draw(){
     transy += float(mouseY-pmouseY)/scaley;
     
     background(255);
-    drawtiles(transx,transy,scalex,scaley);
+    map.draw(transx,transy,scalex,scaley);
   }
   
   for(int i=0; i<40; i++){
