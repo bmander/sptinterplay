@@ -68,34 +68,25 @@ void keyPressed(){
 
 
 void draw(){
-  if(mousePressed){
-    if( person.within( pmouseX, pmouseY ) ){
-      int deltax=(mouseX-pmouseX);
-      int deltay=(mouseY-pmouseY);
-      
-      person.x += deltax;
-      person.y += deltay;
-      
-      if(abs(deltax)>0 || abs(deltay)>0){
-        Point pt = person.getGeoCoord(transx,transy,scalex,scaley);
-        String newid = map.nearest( pt ).id;
-        if(!newid.equals(id)){
-          id=newid;
-          dijkstra = new Dijkstra( graph, id );
-          for(int i=0;i<300;i++){dijkstra.step(true);}
-          
-          image(backdrop,0,0);
-          dijkstra.draw_deferred();
-        }
-        
-        //background(255);
-        //map.draw(transx,transy,scalex,scaley);
-
-      }
-      //updatePixels();
-person.draw(transx,transy,scalex,scaley);
-    }
+  if( mousePressed && person.within( pmouseX, pmouseY ) ){
+    int deltax=(mouseX-pmouseX);
+    int deltay=(mouseY-pmouseY);
+    person.move(deltax,deltay);
+    person.draw(transx,transy,scalex,scaley);
+  }
     
+  if( person.moved ){
+    person.moved=false;
+      
+    Point pt = person.getGeoCoord(transx,transy,scalex,scaley);
+    String newid = map.nearest( pt ).id;
+    if(!newid.equals(id)){
+      id=newid;
+      dijkstra = new Dijkstra( graph, id );
+      for(int i=0;i<300;i++){dijkstra.step(true);}
+          
+      image(backdrop,0,0);
+    }
 
   }
   

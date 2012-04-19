@@ -3,10 +3,17 @@ class Person{
   int y;
   int r=50;
   boolean selected=false;
+  boolean moved=false;
   
   Person(int x, int y){
     this.x=x;
     this.y=y;
+  }
+  
+  void move(int x, int y){
+    this.x+=x;
+    this.y+=y;
+    this.moved=true;
   }
   
   void draw(float transx,float transy,float scalex,float scaley){
