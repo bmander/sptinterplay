@@ -24,7 +24,7 @@ class SPTEdge{
     this.deferred=false;
     if(this.edge!=null && this.edge.way!=null){
       stroke(#AA0000);
-      this.edge.way.draw(transx,transy,scalex,scaley,pow(this.trunkyness*0.5,0.35));
+      this.edge.way.draw(transx,transy,scalex,scaley,pow(this.trunkyness*0.05,0.5));
     }
   }
   
@@ -64,6 +64,7 @@ class Dijkstra{
   PriorityQueue queue;
   boolean running;
   HashMap tree;
+  float boundary;
   
   Dijkstra(Graph graph, String startnode){
     this.graph = graph;
@@ -71,6 +72,7 @@ class Dijkstra{
     this.queue = new PriorityQueue();
     this.running = false;
     this.tree = new HashMap();
+    this.boundary=0;
     
     this.queue.add( 
       new DjQueueNode( 
@@ -88,6 +90,7 @@ class Dijkstra{
     }
     
     DjQueueNode best_edge_pq_node = (DjQueueNode)this.queue.remove();
+    this.boundary=best_edge_pq_node.weight;
     
     //println( "best edge from "+best_edge_pq_node.edge.orig+" to "+best_edge_pq_node.edge.dest+"("+best_edge_pq_node.weight+")" );
     if( tree.containsKey( best_edge_pq_node.sptedge.edge.tov ) ){
@@ -143,6 +146,12 @@ class Dijkstra{
     //println("---");
     
     
+  }
+  
+  void step_to(float boundary, boolean defer_drawing){
+    while(boundary > this.boundary && this.queue.size()>0){
+      this.step(defer_drawing);
+    }
   }
   
   void draw(){

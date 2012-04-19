@@ -1,8 +1,8 @@
 import netscape.javascript.*;
 import org.json.*;
 
-import tsps.*;
-TSPS tspsReceiver;
+//import tsps.*;
+//TSPS tspsReceiver;
 
 // 1024 px/15 ft = 68 px/ft
 
@@ -61,7 +61,7 @@ void setup(){
   backdrop = loadImage("background.tif");
   person.draw(transx,transy,scalex,scaley);
   
-  tspsReceiver= new TSPS(this, 12000);
+  //tspsReceiver= new TSPS(this, 12000);
   
 }
 
@@ -73,8 +73,8 @@ void keyPressed(){
 
   
 void draw(){
+  /*
   tspsReceiver.update();
-    
   for (Enumeration e = tspsReceiver.people.keys() ; e.hasMoreElements() ;) {
     
     int pid = (Integer) e.nextElement();
@@ -83,8 +83,7 @@ void draw(){
     person.update( int(tperson.centroid.x*width), int(tperson.centroid.y*height) );
     person.draw(transx,transy,scalex,scaley);
                	
-  };
-  
+  };*/
   
   if( mousePressed && person.within( pmouseX, pmouseY ) ){
     int deltax=(mouseX-pmouseX);
@@ -101,15 +100,15 @@ void draw(){
     if(!newid.equals(id)){
       id=newid;
       dijkstra = new Dijkstra( graph, id );
-      for(int i=0;i<300;i++){dijkstra.step(true);}
+      for(int i=0;i<500;i++){dijkstra.step_to(150.0,true);}
           
       image(backdrop,0,0);
     }
 
   }
   
-  for(int i=0; i<40; i++){
-    dijkstra.step(true);
-  }
+  //for(int i=0; i<40; i++){
+  //  dijkstra.step(true);
+  //}
   dijkstra.draw_deferred();
 }
