@@ -21,6 +21,7 @@ float transx;
 float transy;
 ArrayList tiles = new ArrayList();
 Graph graph;
+Dijkstra dijkstra;
 
 void drawtiles(float transx, float transy, int scalex, int scaley){
   for(int i=0; i<tiles.size(); i++){
@@ -56,11 +57,19 @@ void setup(){
     println( "done" );
   }
   
+  dijkstra = new Dijkstra( graph, "1330264333" );
+  
   background(255);
   drawtiles(transx,transy,scalex,scaley);
   
   println( graph.adj );
   
+}
+
+void keyPressed(){
+  if( key==' ' ){
+    dijkstra.step();
+  }
 }
 
 void draw(){
