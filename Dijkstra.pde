@@ -1,9 +1,15 @@
 class SPTEdge{
   Edge edge;
+  SPTEdge parent;
   float trunkyness=0;
   
   SPTEdge(Edge edge){
     this.edge=edge;
+  }
+  
+  SPTEdge(Edge edge, SPTEdge parent){
+    this.edge=edge;
+    this.parent=parent;
   }
   
   String toString(){
@@ -18,11 +24,11 @@ class SPTEdge{
 }
 
 class DjQueueNode implements Comparable{
-  SPTEdge edge;
+  SPTEdge sptedge;
   float weight;
   
-  DjQueueNode(SPTEdge edge, float weight){
-    this.edge=edge;
+  DjQueueNode(SPTEdge sptedge, float weight){
+    this.sptedge=sptedge;
     this.weight=weight;
   }
   
@@ -37,7 +43,7 @@ class DjQueueNode implements Comparable{
   }
   
   String toString(){
-    return "DjQueueNode["+this.edge.toString()+"]";
+    return "DjQueueNode["+this.sptedge.toString()+"]";
   }
 }
 
@@ -72,26 +78,27 @@ class Dijkstra{
     DjQueueNode best_edge_pq_node = (DjQueueNode)this.queue.remove();
     
     //println( "best edge from "+best_edge_pq_node.edge.orig+" to "+best_edge_pq_node.edge.dest+"("+best_edge_pq_node.weight+")" );
-    if( tree.containsKey( best_edge_pq_node.edge.edge.tov ) ){
+    if( tree.containsKey( best_edge_pq_node.sptedge.edge.tov ) ){
       //println( "already found a better route" );
       //println( "---" );
       return;
     }
     
-    tree.put( best_edge_pq_node.edge.edge.tov, 
-              new SPTEdge( best_edge_pq_node.edge.edge ) 
+    tree.put( best_edge_pq_node.sptedge.edge.tov,
+              best_edge_pq_node.sptedge
+              //new SPTEdge( best_edge_pq_node.sptedge.edge ) 
             );
               
     //draw the edge
-    if( best_edge_pq_node.edge.edge != null ){
+    if( best_edge_pq_node.sptedge.edge != null ){
       stroke(#000000);
-      best_edge_pq_node.edge.draw(transx,transy,scalex,scaley);
+      best_edge_pq_node.sptedge.draw(transx,transy,scalex,scaley);
     }
     //trace up the tree adding the edge weight
     
     
     //for each outgoing edge
-    ArrayList outgoing = graph.getadj( best_edge_pq_node.edge.edge.tov );
+    ArrayList outgoing = graph.getadj( best_edge_pq_node.sptedge.edge.tov );
     if(outgoing==null){
       return;
     }
