@@ -1,32 +1,28 @@
 class SPTEdge{
-  String orig;
-  String dest;
-  Way way;
+  Edge edge;
   float edgeweight=0;
   float weight;
-  float trunkyness;
+  float trunkyness=0;
   
-  SPTEdge(String orig, String dest, Way way, float edgeweight){
-    this.orig=orig;
-    this.dest=dest;
-    this.way=way;
-    this.edgeweight=edgeweight;
+  SPTEdge(Edge edge, float edgeweight){
+    this.edge=edge;
+    //this.edgeweight=edgeweight;
   }
   
-  SPTEdge(String orig, float weight, float edgeweight, float trunkyness, Way way){
-    this.orig=orig;
+  SPTEdge(Edge edge, float weight, float trunkyness){
+    this.edge=edge;
     this.weight=weight;
-    this.edgeweight=edgeweight;
     this.trunkyness=trunkyness;
-    this.way=way;
   }
   
   String toString(){
-    return orig+"->"+dest;
+    return "SPTEdge["+this.edge.toString()+"]";
   }
   
   void draw(float transx, float transy, float scalex, float scaley){
-    this.way.draw(transx,transy,scalex,scaley,2);
+    if(this.edge!=null && this.edge.way!=null){
+      this.edge.way.draw(transx,transy,scalex,scaley,2);
+    }
   }
 }
 
@@ -73,9 +69,7 @@ class Dijkstra{
     this.queue.add( 
       new DjQueueNode( 
         new SPTEdge(
-          null,
-          startnode,
-          null,
+          new Edge(null,startnode,null),
           0), 
         startnode, 
         0 
@@ -91,24 +85,22 @@ class Dijkstra{
     DjQueueNode best_edge_pq_node = (DjQueueNode)this.queue.remove();
     
     //println( "best edge from "+best_edge_pq_node.edge.orig+" to "+best_edge_pq_node.edge.dest+"("+best_edge_pq_node.weight+")" );
-    if( tree.containsKey( best_edge_pq_node.edge.dest ) ){
+    if( tree.containsKey( best_edge_pq_node.edge.edge.tov ) ){
       //println( "already found a better route" );
       //println( "---" );
       return;
     }
     
-    tree.put( best_edge_pq_node.edge.dest, 
+    tree.put( best_edge_pq_node.edge.edge.tov, 
               new SPTEdge( 
-                best_edge_pq_node.edge.orig, 
+                best_edge_pq_node.edge.edge,
                 best_edge_pq_node.weight, 
-                best_edge_pq_node.edge.edgeweight, 
-                0, 
-                best_edge_pq_node.edge.way 
+                0
               ) 
             );
               
     //draw the edge
-    if( best_edge_pq_node.edge.way != null ){
+    if( best_edge_pq_node.edge.edge != null ){
       stroke(#000000);
       best_edge_pq_node.edge.draw(transx,transy,scalex,scaley);
     }
@@ -116,7 +108,7 @@ class Dijkstra{
     
     
     //for each outgoing edge
-    ArrayList outgoing = graph.getadj( best_edge_pq_node.edge.dest );
+    ArrayList outgoing = graph.getadj( best_edge_pq_node.edge.edge.tov );
     if(outgoing==null){
       return;
     }
@@ -138,9 +130,7 @@ class Dijkstra{
       //println( "added to queue with weight "+(best_edge_pq_node.weight+cand_edge_weight) );
       this.queue.add( new DjQueueNode( 
                         new SPTEdge(
-                          best_edge_pq_node.edge.dest,
-                          candidate_edge.tov,
-                          candidate_edge.way,
+                          candidate_edge,
                           cand_edge_weight), 
                         candidate_edge.tov, 
                         best_edge_pq_node.weight+cand_edge_weight
@@ -155,7 +145,7 @@ class Dijkstra{
   void draw(){
     for(Object item : this.tree.values()){
       SPTEdge edge = (SPTEdge)item;
-      if(edge.way!=null){
+      if(edge.edge!=null){
         edge.draw(transx,transy,scalex,scaley);
       }
     }
