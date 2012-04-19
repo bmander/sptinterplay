@@ -37,8 +37,6 @@ class DjQueueNode implements Comparable{
     this.weight=weight;
   }
   
-  
-  
   int compareTo(Object o){
     if( this.weight < ((DjQueueNode)o).weight ){
       return -1;
@@ -49,9 +47,8 @@ class DjQueueNode implements Comparable{
     }
   }
   
-  
   String toString(){
-    return this.edge.toString();
+    return "DjQueueNode["+this.edge.toString()+"]";
   }
 }
 
@@ -69,7 +66,17 @@ class Dijkstra{
     this.running = false;
     this.tree = new HashMap();
     
-    this.queue.add( new DjQueueNode( new SPTEdge(null,startnode,null,0), startnode, 0 ) );
+    this.queue.add( 
+      new DjQueueNode( 
+        new SPTEdge(
+          null,
+          startnode,
+          null,
+          0), 
+        startnode, 
+        0 
+      ) 
+    );
   }
   
   void step(){
@@ -78,19 +85,25 @@ class Dijkstra{
     }
     
     DjQueueNode best_edge = (DjQueueNode)this.queue.remove();
-    String best_edge_orig = best_edge.edge.orig;
-    String best_edge_dest = best_edge.edge.dest;
-    float best_edge_weight = best_edge.weight;
     
-    println( "best edge from "+best_edge_orig+" to "+best_edge_dest+"("+best_edge_weight+")" );
-    if( tree.containsKey( best_edge_dest ) ){
-      println( "already found a better route" );
-      println( "---" );
+    //println( "best edge from "+best_edge.edge.orig+" to "+best_edge.edge.dest+"("+best_edge.weight+")" );
+    if( tree.containsKey( best_edge.edge.dest ) ){
+      //println( "already found a better route" );
+      //println( "---" );
       return;
     }
     
+    
+    
     tree.put( best_edge.edge.dest, 
-              new SPTEdge( best_edge_orig, best_edge_weight, best_edge.edge.edgeweight, 0, best_edge.edge.way ) );
+              new SPTEdge( 
+                best_edge.edge.orig, 
+                best_edge.weight, 
+                best_edge.edge.edgeweight, 
+                0, 
+                best_edge.edge.way 
+              ) 
+            );
               
     //draw the edge
     if( best_edge.edge.way != null ){
@@ -101,35 +114,39 @@ class Dijkstra{
     
     
     //for each outgoing edge
-    ArrayList outgoing = graph.getadj( best_edge_dest );
+    ArrayList outgoing = graph.getadj( best_edge.edge.dest );
+    if(outgoing==null){
+      return;
+    }
     for( int i=0; i<outgoing.size(); i++ ){
       Edge candidate_edge = (Edge)outgoing.get(i);
-      String cand_dest_node = candidate_edge.tov;
-      Way cand_edge_data = candidate_edge.way;
+      
       float cand_edge_weight = candidate_edge.weight();
-      println( "possible frontier edge to "+candidate_edge.tov+"("+cand_edge_weight+")" );
+      
+      //println( "possible frontier edge to "+candidate_edge.tov+"("+cand_edge_weight+")" );
       if( cand_edge_weight < 0 ){
         continue;
       }
-      if( tree.containsKey( cand_dest_node ) ){
-        println( "path already found" );
+      if( tree.containsKey( candidate_edge.tov ) ){
+        //println( "path already found" );
         continue;
       }
+      
       //stroke(#ff0000);
-      //cand_edge_data.draw(transx,transy,scalex,scaley,2);
-      println( "added to queue with weight "+(best_edge_weight+cand_edge_weight) );
+      //candidate_edge.data.draw(transx,transy,scalex,scaley,2);
+      //println( "added to queue with weight "+(best_edge.weight+cand_edge_weight) );
       this.queue.add( new DjQueueNode( 
                         new SPTEdge(
-                          best_edge_dest,
-                          cand_dest_node,
-                          cand_edge_data,
+                          best_edge.edge.dest,
+                          candidate_edge.tov,
+                          candidate_edge.way,
                           cand_edge_weight), 
-                        cand_dest_node, 
-                        best_edge_weight+cand_edge_weight
+                        candidate_edge.tov, 
+                        best_edge.weight+cand_edge_weight
                       ) 
                     );
     }
-    println("---");
+    //println("---");
     
     
   }

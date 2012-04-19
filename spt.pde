@@ -37,17 +37,17 @@ void setup(){
   
   graph = new Graph();
   
-  scalex=35000;
-  scaley=40000;
+  scalex=17000;
+  scaley=20000;
   transx=-71.065;
   transy=42.336;
   
-  String[] filenames = {//"-71.04-42.36.json",
-    //"-71.04-42.34.json",
-    //"-71.06-42.36.json",
-    "-71.06-42.34.json",
-    //"-71.08-42.36.json",
-    //"-71.08-42.34.json"
+  String[] filenames = {"-71.04-42.36.json",
+    "-71.04-42.34.json",
+    "-71.06-42.36.json",
+    "-71.06-42.34.json", //this one
+    "-71.08-42.36.json",
+    "-71.08-42.34.json"
   };
   for(int i=0; i<filenames.length; i++){
     print(i+"...");
@@ -79,5 +79,9 @@ void draw(){
     
     background(255);
     drawtiles(transx,transy,scalex,scaley);
+  }
+  
+  for(int i=0; i<40; i++){
+  dijkstra.step();
   }
 }
