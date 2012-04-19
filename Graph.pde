@@ -1,6 +1,4 @@
-float dist(double x1,double y1,double x2,double y2){
-  return sqrt(sq(new Double(x2-x1).floatValue())+sq(new Double(y2-y1).floatValue()));
-}
+
 
 class Edge{
   String fromv;

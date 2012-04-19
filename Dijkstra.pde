@@ -93,8 +93,6 @@ class Dijkstra{
       return;
     }
     
-    
-    
     tree.put( best_edge.edge.dest, 
               new SPTEdge( 
                 best_edge.edge.orig, 
@@ -122,7 +120,6 @@ class Dijkstra{
       Edge candidate_edge = (Edge)outgoing.get(i);
       
       float cand_edge_weight = candidate_edge.weight();
-      
       //println( "possible frontier edge to "+candidate_edge.tov+"("+cand_edge_weight+")" );
       if( cand_edge_weight < 0 ){
         continue;
@@ -149,6 +146,15 @@ class Dijkstra{
     //println("---");
     
     
+  }
+  
+  void draw(){
+    for(Object item : this.tree.values()){
+      SPTEdge edge = (SPTEdge)item;
+      if(edge.way!=null){
+        edge.way.draw(transx,transy,scalex,scaley,2);
+      }
+    }
   }
   
 }

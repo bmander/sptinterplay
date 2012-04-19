@@ -29,6 +29,20 @@ class Way{
     }
   }
   
+  Point point(int ix){
+    if(ix<0 || ix>=this.loc.size()){
+      return null;
+    }
+    return (Point)this.loc.get(ix);
+  }
+  
+  Point first(){
+    return this.point(0);
+  }
+  Point last(){
+    return this.point(this.loc.size()-1);
+  }
+  
   String metadata(String key){
     try{
       return wayinfo.getString( key );

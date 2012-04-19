@@ -40,6 +40,38 @@ class Tile{
     }
   }
   
+  Winner nearest(Point pt){
+    String winner=null;
+    float winnerdist=100000.0;
+    
+    for(int i=0; i<this.ways.size(); i++){
+      Way way = (Way)this.ways.get(i);
+      Point first = way.first();
+      Point last = way.last();
+      float firstdist = dist(pt.x,pt.y,first.x,first.y);
+      float lastdist = dist(pt.x,pt.y,first.x,first.y);
+      if(firstdist<winnerdist){
+        winner=way.fromv;
+        winnerdist=firstdist;
+      }
+      if(lastdist<winnerdist){
+        winner=way.tov;
+        winnerdist=lastdist;
+      }
+    }
+    
+    return new Winner(winner,winnerdist);
+  }
+  
+}
+
+class Winner{
+  String id;
+  float dist;
+  Winner(String id, float dist){
+    this.id=id;
+    this.dist=dist;
+  }
 }
 
 class Map{
@@ -70,6 +102,20 @@ class Map{
     for(int i=0; i<tiles.size(); i++){
       ((Tile)tiles.get(i)).draw(transx,transy,scalex,scaley);
     }
+  }
+  
+  Winner nearest(Point pt){
+    String winner=null;
+    float winnerdist = 10000000.0;
+    for(int i=0; i<this.tiles.size(); i++){
+      Tile tile = (Tile)this.tiles.get(i);
+      Winner wn = tile.nearest( pt );
+      if( wn.dist<winnerdist ){
+        winner=wn.id;
+        winnerdist=wn.dist;
+      }
+    }
+    return new Winner(winner,winnerdist);
   }
   
 }

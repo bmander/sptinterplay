@@ -1,40 +1,33 @@
 import netscape.javascript.*;
 import org.json.*;
 
-class Point{
-  double x;
-  double y;
-  
-  Point(double x,double y){
-    this.x=x;
-    this.y=y;
-  }
-  
-  String toString(){
-    return "["+this.x+","+this.y+"]";
-  }
-}
+// 1024 px/15 ft = 68 px/ft
 
 int scalex;
 int scaley;
 float transx;
 float transy;
-ArrayList tiles = new ArrayList();
+
 Map map;
 Graph graph;
 Dijkstra dijkstra;
+Person person;
+String id;
+Point pperson;
+
+PImage backdrop;
 
 void setup(){
   size(1536,1024);
   
   smooth();
   strokeWeight(0.1);
-  
-  graph = new Graph();
+  ellipseMode(CENTER);
+  fill(255,200,200,128);
   
   scalex=17000;
   scaley=20000;
-  transx=-71.065;
+  transx=-71.085;
   transy=42.336;
   
   map = new Map();
@@ -51,13 +44,19 @@ void setup(){
     println( "done" );
   }
   
+  id="1330264333";
+  
+  person = new Person( 100,100 );
+  
   graph = map.toGraph();
-  dijkstra = new Dijkstra( graph, "1330264333" );
+  dijkstra = new Dijkstra( graph, id );
   
   background(255);
   map.draw(transx,transy,scalex,scaley);
-  
-  println( graph.adj );
+  //loadPixels();
+  save("background.tif");
+  backdrop = loadImage("background.tif");
+  person.draw(transx,transy,scalex,scaley);
   
 }
 
@@ -67,13 +66,37 @@ void keyPressed(){
   }
 }
 
+
 void draw(){
   if(mousePressed){
-    transx -= float(mouseX-pmouseX)/scalex;
-    transy += float(mouseY-pmouseY)/scaley;
+    if( person.within( pmouseX, pmouseY ) ){
+      int deltax=(mouseX-pmouseX);
+      int deltay=(mouseY-pmouseY);
+      
+      person.x += deltax;
+      person.y += deltay;
+      
+      if(abs(deltax)>0 || abs(deltay)>0){
+        Point pt = person.getGeoCoord(transx,transy,scalex,scaley);
+        String newid = map.nearest( pt ).id;
+        if(!newid.equals(id)){
+          id=newid;
+          dijkstra = new Dijkstra( graph, id );
+          for(int i=0;i<300;i++){dijkstra.step();}
+          
+          image(backdrop,0,0);
+          dijkstra.draw();
+        }
+        
+        //background(255);
+        //map.draw(transx,transy,scalex,scaley);
+
+      }
+      //updatePixels();
+person.draw(transx,transy,scalex,scaley);
+    }
     
-    background(255);
-    map.draw(transx,transy,scalex,scaley);
+
   }
   
   for(int i=0; i<40; i++){
