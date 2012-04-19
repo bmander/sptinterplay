@@ -62,4 +62,8 @@ class Graph{
       this.add( (Way)tile.ways.get(i) );
     }
   }
+  
+  ArrayList getadj(String fromv){
+    return (ArrayList)this.adj.get(fromv);
+  }
 }

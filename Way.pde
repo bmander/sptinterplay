@@ -38,12 +38,18 @@ class Way{
   }
   
   void draw(double left, double bottom, double scalex, double scaley){
+    float weight;
     if( this.metadata("highway").equals("motorway") ){
-      strokeWeight(1);
+      weight=1;
     } else{
-      strokeWeight(0.1);
+      weight=0.1;
     }
-    //println( this.metadata( "highway" ) );
+    
+    draw(left,bottom,scalex,scaley,weight);
+  }
+  
+  void draw(double left, double bottom, double scalex, double scaley, float weight){
+    strokeWeight(weight);
     
     for(int i=0; i<this.loc.size()-1; i++){
       Point pt1 = (Point)this.loc.get(i);
