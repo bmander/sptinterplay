@@ -62,7 +62,7 @@ void setup(){
 
 void keyPressed(){
   if( key==' ' ){
-    dijkstra.step();
+    dijkstra.step(false);
   }
 }
 
@@ -82,10 +82,10 @@ void draw(){
         if(!newid.equals(id)){
           id=newid;
           dijkstra = new Dijkstra( graph, id );
-          for(int i=0;i<300;i++){dijkstra.step();}
+          for(int i=0;i<300;i++){dijkstra.step(true);}
           
           image(backdrop,0,0);
-          dijkstra.draw();
+          dijkstra.draw_deferred();
         }
         
         //background(255);
@@ -100,6 +100,7 @@ person.draw(transx,transy,scalex,scaley);
   }
   
   for(int i=0; i<40; i++){
-  dijkstra.step();
+    dijkstra.step(true);
   }
+  dijkstra.draw_deferred();
 }
