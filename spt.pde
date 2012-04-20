@@ -1,4 +1,3 @@
-import netscape.javascript.*;
 import org.json.*;
 
 //import tsps.*;
@@ -33,12 +32,12 @@ void setup(){
   transy=42.336;
   
   map = new Map();
-  String[] filenames = {//"-71.04-42.36.json",
-    //"-71.04-42.34.json",
-    //"-71.06-42.36.json",
+  String[] filenames = {"-71.04-42.36.json",
+    "-71.04-42.34.json",
+    "-71.06-42.36.json",
     "-71.06-42.34.json", //this one
-    //"-71.08-42.36.json",
-    //"-71.08-42.34.json"
+    "-71.08-42.36.json",
+    "-71.08-42.34.json"
   };
   for(int i=0; i<filenames.length; i++){
     print(i+"...");
@@ -49,9 +48,11 @@ void setup(){
   person1 = new Person( 100,100 );
   person1.id="1330264333";
   person2 = new Person( 200,100 );
+  person2.id="1330264333";
   
   graph = map.toGraph();
   person1.dijkstra = new Dijkstra( graph, person1.id );
+  person2.dijkstra = new Dijkstra( graph, person2.id );
   
   background(255);
   map.draw(transx,transy,scalex,scaley);
@@ -96,6 +97,8 @@ void draw(){
       person2.move(deltax,deltay);
     }
   }
+  
+  boolean someone_moved=false;
       
   if( !person1.still(0.75) ){
       
@@ -103,20 +106,41 @@ void draw(){
     String newid = map.nearest( pt ).id;
     if(!newid.equals(person1.id)){
       person1.id=newid;
-      person1.dijkstra = new Dijkstra( graph, person1.id );
-      for(int i=0;i<500;i++){person1.dijkstra.step_to(150.0,true);}
-          
-      image(backdrop,0,0);
+      
+      someone_moved=true;
       
     }
 
-  } else {
+  } 
+  
+  if( !person2.still(0.75) ){
+      
+    Point pt = person2.getGeoCoord(transx,transy,scalex,scaley);
+    String newid = map.nearest( pt ).id;
+    if(!newid.equals(person2.id)){
+      person2.id=newid;
+      someone_moved=true;
+    }
+
+  } 
+    
+  if(someone_moved){
+      person1.dijkstra = new Dijkstra( graph, person1.id );
+      person1.dijkstra.step_to(150.0,true);
+      
+      person2.dijkstra = new Dijkstra( graph, person2.id );
+      person2.dijkstra.step_to(150.0,true);
+      
+      image(backdrop,0,0);
+  } else if(person1.still(0.75) && person2.still(0.75)) {
     for(int i=0; i<40; i++){
       person1.dijkstra.step(true);
+      person2.dijkstra.step(true);
     }
   }
   
   person1.dijkstra.draw_deferred();
+  person2.dijkstra.draw_deferred();
   
   person1.draw(transx,transy,scalex,scaley);
   person2.draw(transx,transy,scalex,scaley);
