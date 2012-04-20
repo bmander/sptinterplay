@@ -96,6 +96,19 @@ class Dijkstra{
     return sptedge.weight;
   }
   
+  SPTEdge sptedge_to(String tov){
+    return (SPTEdge)this.tree.get(tov);
+  }
+  
+  void draw_to(String tov){
+    SPTEdge curr = this.sptedge_to(tov);
+    while(curr != null && curr.edge.way != null){
+      stroke(0,0,255);
+      curr.edge.way.draw(transx,transy,scalex,scaley,5);
+      curr=curr.parent;
+    }
+  }
+  
   void step(boolean defer_drawing, Dijkstra competitor){
     if( this.queue.size()==0 ){
       return;

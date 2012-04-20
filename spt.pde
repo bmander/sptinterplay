@@ -152,6 +152,11 @@ void draw(){
   stroke(0,200,0);
   person2.dijkstra.draw_deferred();
   
+  if(meetpoint != null){
+    person1.dijkstra.draw_to( meetpoint );
+    person2.dijkstra.draw_to( meetpoint );
+  }
+  
   person1.draw(transx,transy,scalex,scaley);
   person2.draw(transx,transy,scalex,scaley);
 }
