@@ -14,9 +14,9 @@ float transy;
 Map map;
 Graph graph;
 Dijkstra dijkstra;
-Person person;
-String id;
-Point pperson;
+Person person1;
+Person person2;
+//String id;
 
 PImage backdrop;
 
@@ -34,12 +34,12 @@ void setup(){
   transy=42.336;
   
   map = new Map();
-  String[] filenames = {"-71.04-42.36.json",
-    "-71.04-42.34.json",
-    "-71.06-42.36.json",
+  String[] filenames = {//"-71.04-42.36.json",
+    //"-71.04-42.34.json",
+    //"-71.06-42.36.json",
     "-71.06-42.34.json", //this one
-    "-71.08-42.36.json",
-    "-71.08-42.34.json"
+    //"-71.08-42.36.json",
+    //"-71.08-42.34.json"
   };
   for(int i=0; i<filenames.length; i++){
     print(i+"...");
@@ -47,19 +47,20 @@ void setup(){
     println( "done" );
   }
   
-  id="1330264333";
-  
-  person = new Person( 100,100 );
+  person1 = new Person( 100,100 );
+  person1.id="1330264333";
+  person2 = new Person( 200,100 );
   
   graph = map.toGraph();
-  dijkstra = new Dijkstra( graph, id );
+  dijkstra = new Dijkstra( graph, person1.id );
   
   background(255);
   map.draw(transx,transy,scalex,scaley);
   //loadPixels();
   save("background.tif");
   backdrop = loadImage("background.tif");
-  person.draw(transx,transy,scalex,scaley);
+  person1.draw(transx,transy,scalex,scaley);
+  person2.draw(transx,transy,scalex,scaley);
   
   //tspsReceiver= new TSPS(this, 12000);
   
@@ -80,26 +81,30 @@ void draw(){
     int pid = (Integer) e.nextElement();
     TSPSPerson tperson = (TSPSPerson) tspsReceiver.people.get(pid);
     
-    person.update( int(tperson.centroid.x*width), int(tperson.centroid.y*height) );
-    person.draw(transx,transy,scalex,scaley);
+    person1.update( int(tperson.centroid.x*width), int(tperson.centroid.y*height) );
+    person1.draw(transx,transy,scalex,scaley);
                	
   };*/
   
-  if( mousePressed && person.within( pmouseX, pmouseY ) ){
+  if( mousePressed ){
     int deltax=(mouseX-pmouseX);
     int deltay=(mouseY-pmouseY);
-    person.move(deltax,deltay);
-  }
-  
-  println( person.still(0.75) );
     
-  if( !person.still(0.75) ){
+    if( person1.within( pmouseX, pmouseY )){
+      person1.move(deltax,deltay);
+    }
+    if( person2.within( pmouseX, pmouseY )){
+      person2.move(deltax,deltay);
+    }
+  }
       
-    Point pt = person.getGeoCoord(transx,transy,scalex,scaley);
+  if( !person1.still(0.75) ){
+      
+    Point pt = person1.getGeoCoord(transx,transy,scalex,scaley);
     String newid = map.nearest( pt ).id;
-    if(!newid.equals(id)){
-      id=newid;
-      dijkstra = new Dijkstra( graph, id );
+    if(!newid.equals(person1.id)){
+      person1.id=newid;
+      dijkstra = new Dijkstra( graph, person1.id );
       for(int i=0;i<500;i++){dijkstra.step_to(150.0,true);}
           
       image(backdrop,0,0);
@@ -108,9 +113,10 @@ void draw(){
 
   }
   
-  person.draw(transx,transy,scalex,scaley);
+  person1.draw(transx,transy,scalex,scaley);
+  person2.draw(transx,transy,scalex,scaley);
   
-  if( person.still(0.75) ){
+  if( person1.still(0.75) ){
     for(int i=0; i<40; i++){
       dijkstra.step(true);
     }

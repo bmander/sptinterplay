@@ -6,12 +6,16 @@ class Person{
   float lastmoved;
   int r=50;
   
+  String id;
+  
   Person(int x, int y){
     this.x=x;
     this.y=y;
     this.t=millis()/1000.0;
     this.speed=0;
     this.lastmoved=t;
+    
+    this.id=null;
   }
   
   boolean still(float timeout){
