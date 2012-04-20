@@ -102,16 +102,7 @@ class Dijkstra{
     }
     
     DjQueueNode best_edge_pq_node = (DjQueueNode)this.queue.remove();
-    
-    if( competitor!=null && best_edge_pq_node.weight > competitor.get_weight(best_edge_pq_node.sptedge.edge.tov) ){
-      if(meetpoint==null){
-        Edge edge = best_edge_pq_node.sptedge.edge;
-        meetpoint=edge.tov;
-        Point endpoint = edge.endpoint();
-        ellipse( width-endpoint.screeny(), height-endpoint.screenx(), 100, 100 );
-      }
-      return;
-    }
+
     
     this.boundary=best_edge_pq_node.weight;
     
@@ -140,6 +131,15 @@ class Dijkstra{
     }
     
     
+    if( competitor!=null && best_edge_pq_node.weight > competitor.get_weight(best_edge_pq_node.sptedge.edge.tov) ){
+      if(meetpoint==null){
+        Edge edge = best_edge_pq_node.sptedge.edge;
+        meetpoint=edge.tov;
+        Point endpoint = edge.endpoint();
+        ellipse( width-endpoint.screeny(), height-endpoint.screenx(), 100, 100 );
+      }
+      return;
+    }
     
     //for each outgoing edge
     ArrayList outgoing = graph.getadj( best_edge_pq_node.sptedge.edge.tov );
