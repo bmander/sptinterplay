@@ -145,11 +145,10 @@ class Dijkstra{
     
     
     if( competitor!=null && best_edge_pq_node.weight > competitor.get_weight(best_edge_pq_node.sptedge.edge.tov) ){
-      if(meetpoint==null){
+      if(meetpoint_id==null){
         Edge edge = best_edge_pq_node.sptedge.edge;
-        meetpoint=edge.tov;
-        Point endpoint = edge.endpoint();
-        ellipse( width-endpoint.screeny(), height-endpoint.screenx(), 100, 100 );
+        meetpoint_id=edge.tov;
+        meetpoint = edge.endpoint();
       }
       return;
     }

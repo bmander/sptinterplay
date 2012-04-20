@@ -20,7 +20,8 @@ float boundary=0;
 
 PImage backdrop;
 
-String meetpoint=null;
+String meetpoint_id=null;
+Point meetpoint=null;
 
 void setup(){
   size(1024,1536);
@@ -28,7 +29,6 @@ void setup(){
   smooth();
   strokeWeight(0.1);
   ellipseMode(CENTER);
-  fill(255,200,200,128);
   
   scalex=17000;
   scaley=20000;
@@ -129,7 +129,7 @@ void draw(){
   } 
     
   if(someone_moved){
-      meetpoint=null;
+      meetpoint_id=null;
       person1.dijkstra = new Dijkstra( graph, person1.id );
       person2.dijkstra = new Dijkstra( graph, person2.id );
 
@@ -154,11 +154,16 @@ void draw(){
   stroke(0,200,0);
   person2.dijkstra.draw_deferred();
   
-  if(meetpoint != null){
-    person1.dijkstra.draw_to( meetpoint );
-    person2.dijkstra.draw_to( meetpoint );
+  if(meetpoint_id != null){
+    person1.dijkstra.draw_to( meetpoint_id );
+    person2.dijkstra.draw_to( meetpoint_id );
+    
+    stroke(0,0,255);
+    fill(0,0,255);
+    ellipse( width-meetpoint.screeny(), height-meetpoint.screenx(), 20, 20 );
   }
   
+  fill(255,200,200,128);
   person1.draw(transx,transy,scalex,scaley);
   person2.draw(transx,transy,scalex,scaley);
 }
