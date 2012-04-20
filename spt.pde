@@ -13,10 +13,9 @@ float transy;
 
 Map map;
 Graph graph;
-Dijkstra dijkstra;
+
 Person person1;
 Person person2;
-//String id;
 
 PImage backdrop;
 
@@ -52,7 +51,7 @@ void setup(){
   person2 = new Person( 200,100 );
   
   graph = map.toGraph();
-  dijkstra = new Dijkstra( graph, person1.id );
+  person1.dijkstra = new Dijkstra( graph, person1.id );
   
   background(255);
   map.draw(transx,transy,scalex,scaley);
@@ -68,7 +67,7 @@ void setup(){
 
 void keyPressed(){
   if( key==' ' ){
-    dijkstra.step(false);
+    person1.dijkstra.step(false);
   }
 }
 
@@ -104,8 +103,8 @@ void draw(){
     String newid = map.nearest( pt ).id;
     if(!newid.equals(person1.id)){
       person1.id=newid;
-      dijkstra = new Dijkstra( graph, person1.id );
-      for(int i=0;i<500;i++){dijkstra.step_to(150.0,true);}
+      person1.dijkstra = new Dijkstra( graph, person1.id );
+      for(int i=0;i<500;i++){person1.dijkstra.step_to(150.0,true);}
           
       image(backdrop,0,0);
       
@@ -118,8 +117,8 @@ void draw(){
   
   if( person1.still(0.75) ){
     for(int i=0; i<40; i++){
-      dijkstra.step(true);
+      person1.dijkstra.step(true);
     }
   }
-  dijkstra.draw_deferred();
+  person1.dijkstra.draw_deferred();
 }

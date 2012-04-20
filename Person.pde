@@ -7,6 +7,7 @@ class Person{
   int r=50;
   
   String id;
+  Dijkstra dijkstra;
   
   Person(int x, int y){
     this.x=x;
@@ -16,6 +17,7 @@ class Person{
     this.lastmoved=t;
     
     this.id=null;
+    this.dijkstra=null;
   }
   
   boolean still(float timeout){
