@@ -20,6 +20,8 @@ float boundary=0;
 
 PImage backdrop;
 
+String meetpoint=null;
+
 void setup(){
   size(1024,1536);
   
@@ -127,6 +129,7 @@ void draw(){
   } 
     
   if(someone_moved){
+      meetpoint=null;
       boundary=150.0;
       person1.dijkstra = new Dijkstra( graph, person1.id );
       person1.dijkstra.step_to(boundary,true, null);

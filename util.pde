@@ -17,6 +17,14 @@ class Point{
     if(pt==null){return false;}
     return x==pt.x&&y==pt.y;
   }
+  
+  float screenx(){
+    return new Double((this.x-transx)*scalex).floatValue();
+  }
+  
+  float screeny(){
+    return new Double((this.y-transy)*scaley).floatValue();
+  }
 }
 
 float dist(double x1,double y1,double x2,double y2){

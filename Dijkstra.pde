@@ -103,10 +103,13 @@ class Dijkstra{
     
     DjQueueNode best_edge_pq_node = (DjQueueNode)this.queue.remove();
     
-    //if(competitor !=null){
-    //  println( best_edge_pq_node.weight+" vs "+competitor.get_weight(best_edge_pq_node.sptedge.edge.tov));
-    //}
     if( competitor!=null && best_edge_pq_node.weight > competitor.get_weight(best_edge_pq_node.sptedge.edge.tov) ){
+      if(meetpoint==null){
+        Edge edge = best_edge_pq_node.sptedge.edge;
+        meetpoint=edge.tov;
+        Point endpoint = edge.endpoint();
+        ellipse( width-endpoint.screeny(), height-endpoint.screenx(), 100, 100 );
+      }
       return;
     }
     
@@ -135,6 +138,8 @@ class Dijkstra{
       if(!defer_drawing){curr.draw(transx,transy,scalex,scaley);}
       curr=curr.parent;
     }
+    
+    
     
     //for each outgoing edge
     ArrayList outgoing = graph.getadj( best_edge_pq_node.sptedge.edge.tov );
@@ -172,7 +177,6 @@ class Dijkstra{
   }
   
   void step_to(float boundary, boolean defer_drawing, Dijkstra competitor){
-    
     while(boundary > this.boundary && this.queue.size()>0){
       this.step(defer_drawing, competitor);
     }

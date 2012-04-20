@@ -27,6 +27,22 @@ class Edge{
   String toString(){
     return "["+this.fromv+" -("+this.weight()+")-> "+this.tov+"]";
   }
+  
+  Point startpoint(){
+    if(fromv.equals(way.fromv)){
+      return (Point)this.way.loc.get(0);
+    } else {
+      return (Point)this.way.loc.get(this.way.loc.size()-1);
+    }
+  }
+  
+  Point endpoint(){
+    if(fromv.equals(way.fromv)){
+      return (Point)this.way.loc.get(this.way.loc.size()-1);
+    } else {
+      return (Point)this.way.loc.get(0);
+    }
+  }
 }
 
 class Graph{
