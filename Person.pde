@@ -1,25 +1,37 @@
 class Person{
   int x;
   int y;
+  float t;
+  float speed;
+  float lastmoved;
   int r=50;
-  boolean selected=false;
-  boolean moved=false;
   
   Person(int x, int y){
     this.x=x;
     this.y=y;
+    this.t=millis()/1000.0;
+    this.speed=0;
+    this.lastmoved=t;
+  }
+  
+  boolean still(float timeout){
+    return ((millis()/1000.0)-this.lastmoved)>timeout;
   }
   
   void move(int x, int y){
-    this.x+=x;
-    this.y+=y;
-    this.moved=true;
+    update(this.x+x,this.y+y);
   }
   
   void update(int x, int y){
+    float now = millis()/1000.0;
+    this.speed= dist(this.x,this.y,x,y)/(now-this.t);
+    if(speed>300){
+      this.lastmoved=now;
+    }
+    
     this.x=x;
     this.y=y;
-    this.moved=true;
+    this.t=now;
   }
   
   void draw(float transx,float transy,float scalex,float scaley){

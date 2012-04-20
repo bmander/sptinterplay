@@ -89,11 +89,11 @@ void draw(){
     int deltax=(mouseX-pmouseX);
     int deltay=(mouseY-pmouseY);
     person.move(deltax,deltay);
-    person.draw(transx,transy,scalex,scaley);
   }
+  
+  println( person.still(0.75) );
     
-  if( person.moved ){
-    person.moved=false;
+  if( !person.still(0.75) ){
       
     Point pt = person.getGeoCoord(transx,transy,scalex,scaley);
     String newid = map.nearest( pt ).id;
@@ -103,12 +103,17 @@ void draw(){
       for(int i=0;i<500;i++){dijkstra.step_to(150.0,true);}
           
       image(backdrop,0,0);
+      
     }
 
   }
   
-  //for(int i=0; i<40; i++){
-  //  dijkstra.step(true);
-  //}
+  person.draw(transx,transy,scalex,scaley);
+  
+  if( person.still(0.75) ){
+    for(int i=0; i<40; i++){
+      dijkstra.step(true);
+    }
+  }
   dijkstra.draw_deferred();
 }
