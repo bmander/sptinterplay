@@ -54,4 +54,28 @@ class Person{
     return new Point((new Double(height-this.y).doubleValue()/scalex)+transx, new Double(width-this.x).doubleValue()/scaley+transy);
   }
   
+  boolean update_tree(float timeout){
+    boolean newtree=false;
+    
+    if( !this.still(timeout) ){
+      
+      Point pt = this.getGeoCoord(transx,transy,scalex,scaley);
+      String newid = map.nearest( pt ).id;
+      if(!newid.equals(this.id)){
+        this.id=newid;
+        this.dijkstra = new Dijkstra( graph, this.id );
+        this.dijkstra.step_to(150.0,true);
+      
+        newtree=true;
+      }
+    
+    } else {
+      for(int i=0; i<40; i++){
+        this.dijkstra.step(true);
+      }
+    }
+    
+    return newtree;
+  }
+  
 }

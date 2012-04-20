@@ -3,17 +3,20 @@ class SPTEdge{
   SPTEdge parent;
   float trunkyness=0;
   float edgeweight=0; //cache edge.weight(), in case that's expensive
+  float weight=0; //weight from origin up to the end of this edge
   boolean deferred=false;
   
-  SPTEdge(Edge edge, float edgeweight){
+  SPTEdge(Edge edge, float edgeweight, float weight){
     this.edge=edge;
     this.edgeweight=edgeweight;
+    this.weight=weight;
   }
   
-  SPTEdge(Edge edge, float edgeweight, SPTEdge parent){
+  SPTEdge(Edge edge, float edgeweight, float weight, SPTEdge parent){
     this.edge=edge;
     this.parent=parent;
     this.edgeweight=edgeweight;
+    this.weight=weight;
   }
   
   String toString(){
@@ -23,7 +26,6 @@ class SPTEdge{
   void draw(float transx, float transy, float scalex, float scaley){
     this.deferred=false;
     if(this.edge!=null && this.edge.way!=null){
-      stroke(#AA0000);
       this.edge.way.draw(transx,transy,scalex,scaley,pow(this.trunkyness*0.05,0.5));
     }
   }
@@ -78,6 +80,7 @@ class Dijkstra{
       new DjQueueNode( 
         new SPTEdge(
           new Edge(null,startnode,null),
+          0,
           0), 
         0 
       ) 
@@ -138,7 +141,10 @@ class Dijkstra{
       //candidate_edge.data.draw(transx,transy,scalex,scaley,2);
       //println( "added to queue with weight "+(best_edge_pq_node.weight+cand_edge_weight) );
       this.queue.add( new DjQueueNode( 
-                        new SPTEdge( candidate_edge, cand_edge_weight, best_edge_pq_node.sptedge ), 
+                        new SPTEdge( candidate_edge, 
+                          cand_edge_weight,
+                          best_edge_pq_node.weight+cand_edge_weight,
+                          best_edge_pq_node.sptedge ), 
                         best_edge_pq_node.weight+cand_edge_weight
                       ) 
                     );
@@ -154,11 +160,21 @@ class Dijkstra{
     }
   }
   
-  void draw(){
+  float weightTo(String id){
+    SPTEdge sptedge = (SPTEdge)this.tree.get(id);
+    if(sptedge==null){
+      return 10000000.0;
+    }
+    return sptedge.weight;
+  }
+  
+  void draw(Dijkstra other){
     for(Object item : this.tree.values()){
-      SPTEdge edge = (SPTEdge)item;
-      if(edge.edge!=null){
-        edge.draw(transx,transy,scalex,scaley);
+      SPTEdge sptedge = (SPTEdge)item;
+      if(sptedge.edge!=null){
+        if( sptedge.weight < other.weightTo( sptedge.edge.tov ) ){
+          sptedge.draw(transx,transy,scalex,scaley);
+        }
       }
     }
   }

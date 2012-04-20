@@ -33,12 +33,12 @@ void setup(){
   transy=42.336;
   
   map = new Map();
-  String[] filenames = {//"-71.04-42.36.json",
-    //"-71.04-42.34.json",
-    //"-71.06-42.36.json",
+  String[] filenames = {"-71.04-42.36.json",
+    "-71.04-42.34.json",
+    "-71.06-42.36.json",
     "-71.06-42.34.json", //this one
-    //"-71.08-42.36.json",
-    //"-71.08-42.34.json"
+    "-71.08-42.36.json",
+    "-71.08-42.34.json"
   };
   for(int i=0; i<filenames.length; i++){
     print(i+"...");
@@ -49,9 +49,11 @@ void setup(){
   person1 = new Person( 100,100 );
   person1.id="1330264333";
   person2 = new Person( 200,100 );
+  person2.id="1330264333";
   
   graph = map.toGraph();
   person1.dijkstra = new Dijkstra( graph, person1.id );
+  person2.dijkstra = new Dijkstra( graph, person2.id );
   
   background(255);
   map.draw(transx,transy,scalex,scaley);
@@ -96,27 +98,24 @@ void draw(){
       person2.move(deltax,deltay);
     }
   }
-      
-  if( !person1.still(0.75) ){
-      
-    Point pt = person1.getGeoCoord(transx,transy,scalex,scaley);
-    String newid = map.nearest( pt ).id;
-    if(!newid.equals(person1.id)){
-      person1.id=newid;
-      person1.dijkstra = new Dijkstra( graph, person1.id );
-      for(int i=0;i<500;i++){person1.dijkstra.step_to(150.0,true);}
-          
-      image(backdrop,0,0);
-      
-    }
-
-  } else {
-    for(int i=0; i<40; i++){
-      person1.dijkstra.step(true);
-    }
-  }
   
-  person1.dijkstra.draw_deferred();
+  boolean newtree=false;
+  
+  newtree = newtree || person1.update_tree(0.75);
+  newtree = newtree || person2.update_tree(0.75);
+  
+  //if(newtree){
+    image(backdrop,0,0);
+    stroke(#AA0000);
+    person1.dijkstra.draw(person2.dijkstra);
+    stroke(#00AA00);
+    person2.dijkstra.draw(person1.dijkstra);
+  //} else {
+  //  stroke(#AA0000);
+  //  person1.dijkstra.draw_deferred();
+  //  stroke(#00AA00);
+  //  person2.dijkstra.draw_deferred();
+  //}
   
   person1.draw(transx,transy,scalex,scaley);
   person2.draw(transx,transy,scalex,scaley);
