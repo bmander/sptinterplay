@@ -16,6 +16,8 @@ Graph graph;
 Person person1;
 Person person2;
 
+float boundary=0;
+
 PImage backdrop;
 
 void setup(){
@@ -68,7 +70,7 @@ void setup(){
 
 void keyPressed(){
   if( key==' ' ){
-    person1.dijkstra.step(false);
+    person1.dijkstra.step(false, null);
   }
 }
 
@@ -125,21 +127,26 @@ void draw(){
   } 
     
   if(someone_moved){
+      boundary=150.0;
       person1.dijkstra = new Dijkstra( graph, person1.id );
-      person1.dijkstra.step_to(150.0,true);
+      person1.dijkstra.step_to(boundary,true, null);
       
       person2.dijkstra = new Dijkstra( graph, person2.id );
-      person2.dijkstra.step_to(150.0,true);
+      person2.dijkstra.step_to(boundary,true, null);
       
       image(backdrop,0,0);
   } else if(person1.still(0.75) && person2.still(0.75)) {
     for(int i=0; i<40; i++){
-      person1.dijkstra.step(true);
-      person2.dijkstra.step(true);
+      boundary += 0.1;
+      //println( person1.dijkstra.boundary + "vs" + person2.dijkstra.boundary );
+      person1.dijkstra.step_to(boundary,true, person2.dijkstra);
+      person2.dijkstra.step_to(boundary,true, person1.dijkstra);
     }
   }
   
+  stroke(200,0,0);
   person1.dijkstra.draw_deferred();
+  stroke(0,200,0);
   person2.dijkstra.draw_deferred();
   
   person1.draw(transx,transy,scalex,scaley);

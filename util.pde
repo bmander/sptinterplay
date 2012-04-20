@@ -1,3 +1,4 @@
+float INFINITY=100000000.0;
 
 class Point{
   double x;

@@ -3,17 +3,20 @@ class SPTEdge{
   SPTEdge parent;
   float trunkyness=0;
   float edgeweight=0; //cache edge.weight(), in case that's expensive
+  float weight;
   boolean deferred=false;
   
-  SPTEdge(Edge edge, float edgeweight){
+  SPTEdge(Edge edge, float edgeweight, float weight){
     this.edge=edge;
     this.edgeweight=edgeweight;
+    this.weight=weight;
   }
   
-  SPTEdge(Edge edge, float edgeweight, SPTEdge parent){
+  SPTEdge(Edge edge, float edgeweight, float weight, SPTEdge parent){
     this.edge=edge;
     this.parent=parent;
     this.edgeweight=edgeweight;
+    this.weight=weight;
   }
   
   String toString(){
@@ -23,7 +26,7 @@ class SPTEdge{
   void draw(float transx, float transy, float scalex, float scaley){
     this.deferred=false;
     if(this.edge!=null && this.edge.way!=null){
-      stroke(#AA0000);
+      //stroke(#AA0000);
       this.edge.way.draw(transx,transy,scalex,scaley,pow(this.trunkyness*0.05,0.5));
     }
   }
@@ -78,18 +81,35 @@ class Dijkstra{
       new DjQueueNode( 
         new SPTEdge(
           new Edge(null,startnode,null),
+          0,
           0), 
         0 
       ) 
     );
   }
   
-  void step(boolean defer_drawing){
+  float get_weight(String id){
+    SPTEdge sptedge = (SPTEdge)this.tree.get(id);
+    if(sptedge==null){
+      return INFINITY;
+    }
+    return sptedge.weight;
+  }
+  
+  void step(boolean defer_drawing, Dijkstra competitor){
     if( this.queue.size()==0 ){
       return;
     }
     
     DjQueueNode best_edge_pq_node = (DjQueueNode)this.queue.remove();
+    
+    //if(competitor !=null){
+    //  println( best_edge_pq_node.weight+" vs "+competitor.get_weight(best_edge_pq_node.sptedge.edge.tov));
+    //}
+    if( competitor!=null && best_edge_pq_node.weight > competitor.get_weight(best_edge_pq_node.sptedge.edge.tov) ){
+      return;
+    }
+    
     this.boundary=best_edge_pq_node.weight;
     
     //println( "best edge from "+best_edge_pq_node.edge.orig+" to "+best_edge_pq_node.edge.dest+"("+best_edge_pq_node.weight+")" );
@@ -138,7 +158,10 @@ class Dijkstra{
       //candidate_edge.data.draw(transx,transy,scalex,scaley,2);
       //println( "added to queue with weight "+(best_edge_pq_node.weight+cand_edge_weight) );
       this.queue.add( new DjQueueNode( 
-                        new SPTEdge( candidate_edge, cand_edge_weight, best_edge_pq_node.sptedge ), 
+                        new SPTEdge( candidate_edge, 
+                          cand_edge_weight, 
+                          best_edge_pq_node.weight+cand_edge_weight,
+                          best_edge_pq_node.sptedge ), 
                         best_edge_pq_node.weight+cand_edge_weight
                       ) 
                     );
@@ -148,9 +171,10 @@ class Dijkstra{
     
   }
   
-  void step_to(float boundary, boolean defer_drawing){
+  void step_to(float boundary, boolean defer_drawing, Dijkstra competitor){
+    
     while(boundary > this.boundary && this.queue.size()>0){
-      this.step(defer_drawing);
+      this.step(defer_drawing, competitor);
     }
   }
   
