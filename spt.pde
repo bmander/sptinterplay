@@ -55,11 +55,11 @@ void setup(){
   
   background(255);
   map.draw(transx,transy,scalex,scaley);
-  //loadPixels();
+  
   save("background.tif");
   backdrop = loadImage("background.tif");
-  person1.draw(transx,transy,scalex,scaley);
-  person2.draw(transx,transy,scalex,scaley);
+  //person1.draw(transx,transy,scalex,scaley);
+  //person2.draw(transx,transy,scalex,scaley);
   
   //tspsReceiver= new TSPS(this, 12000);
   
@@ -110,15 +110,14 @@ void draw(){
       
     }
 
-  }
-  
-  person1.draw(transx,transy,scalex,scaley);
-  person2.draw(transx,transy,scalex,scaley);
-  
-  if( person1.still(0.75) ){
+  } else {
     for(int i=0; i<40; i++){
       person1.dijkstra.step(true);
     }
   }
+  
   person1.dijkstra.draw_deferred();
+  
+  person1.draw(transx,transy,scalex,scaley);
+  person2.draw(transx,transy,scalex,scaley);
 }
