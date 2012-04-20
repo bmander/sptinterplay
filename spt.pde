@@ -130,12 +130,14 @@ void draw(){
     
   if(someone_moved){
       meetpoint=null;
-      boundary=150.0;
       person1.dijkstra = new Dijkstra( graph, person1.id );
-      person1.dijkstra.step_to(boundary,true, null);
-      
       person2.dijkstra = new Dijkstra( graph, person2.id );
-      person2.dijkstra.step_to(boundary,true, null);
+
+      boundary=150.0;
+      for(float i=0.1; i<=boundary; i+=0.1){
+        person1.dijkstra.step_to(i,true, person2.dijkstra);
+        person2.dijkstra.step_to(i,true, person1.dijkstra);
+      }
       
       image(backdrop,0,0);
   } else if(person1.still(0.75) && person2.still(0.75)) {
