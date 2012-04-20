@@ -33,7 +33,7 @@ class Person{
   }
   
   Point getGeoCoord(double transx, double transy,double scalex, double scaley){
-    return new Point((new Double(this.x).doubleValue()/scalex)+transx, new Double(height-this.y).doubleValue()/scaley+transy);
+    return new Point((new Double(height-this.y).doubleValue()/scalex)+transx, new Double(width-this.x).doubleValue()/scaley+transy);
   }
   
 }

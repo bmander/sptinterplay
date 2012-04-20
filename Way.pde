@@ -74,7 +74,7 @@ class Way{
       float x2 = new Double((pt2.x-left)*scalex).floatValue();
       float y2 = new Double((pt2.y-bottom)*scaley).floatValue();
       
-      line( x1, height-y1, x2, height-y2);
+      line( width-y1, height-x1, width-y2, height-x2);
     }
   }
 }

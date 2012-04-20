@@ -30,7 +30,7 @@ void setup(){
   
   scalex=17000;
   scaley=20000;
-  transx=-71.085;
+  transx=-71.095;
   transy=42.336;
   
   map = new Map();
