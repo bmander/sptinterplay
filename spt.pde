@@ -93,7 +93,6 @@ void draw(){
     person1.draw(transx,transy,scalex,scaley);
                	
   };*/
-  
   Object[] peopleArr = people.toArray();
   
   if( mousePressed ){
@@ -125,11 +124,10 @@ void draw(){
 
       boundary=150.0;
       for(float i=0.1; i<=boundary; i+=0.1){
-        //for(int i=0; i<peopleArr.length; i++){
-        //  Person person = (Person)peopleArr[i];
-          person1.dijkstra.step_to(i,true, person2.dijkstra);
-          person2.dijkstra.step_to(i,true, person1.dijkstra);
-        //}
+        for(int j=0; j<peopleArr.length; j++){
+          Person person = (Person)peopleArr[j];
+          person.dijkstra.step_to(i,true,peopleArr);
+        }
       }
       
       image(backdrop,0,0);
@@ -137,8 +135,8 @@ void draw(){
     for(int i=0; i<40; i++){
       boundary += 0.1;
       //println( person1.dijkstra.boundary + "vs" + person2.dijkstra.boundary );
-      person1.dijkstra.step_to(boundary,true, person2.dijkstra);
-      person2.dijkstra.step_to(boundary,true, person1.dijkstra);
+      person1.dijkstra.step_to(boundary,true, peopleArr);
+      person2.dijkstra.step_to(boundary,true, peopleArr);
     }
   }
   

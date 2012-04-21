@@ -109,7 +109,7 @@ class Dijkstra{
     }
   }
   
-  void step(boolean defer_drawing, Dijkstra competitor){
+  void step(boolean defer_drawing, Object[] competitors){
     if( this.queue.size()==0 ){
       return;
     }
@@ -143,8 +143,21 @@ class Dijkstra{
       curr=curr.parent;
     }
     
+    //find out if any competitor has a lower weight
+    boolean winner=true;
+    if(competitors!=null){
+      for(int i=0; i<competitors.length; i++){
+        Person competitor = (Person)competitors[i];
+        if(competitor.dijkstra.equals(this)){ //this is the same as the competitor
+          continue;
+        }
+        if(best_edge_pq_node.weight > competitor.dijkstra.get_weight(best_edge_pq_node.sptedge.edge.tov)){
+          winner=false;
+        }
+      }
+    }
     
-    if( competitor!=null && best_edge_pq_node.weight > competitor.get_weight(best_edge_pq_node.sptedge.edge.tov) ){
+    if(!winner){
       if(meetpoint_id==null){
         Edge edge = best_edge_pq_node.sptedge.edge;
         meetpoint_id=edge.tov;
@@ -188,9 +201,9 @@ class Dijkstra{
     
   }
   
-  void step_to(float boundary, boolean defer_drawing, Dijkstra competitor){
+  void step_to(float boundary, boolean defer_drawing, Object[] competitors){
     while(boundary > this.boundary && this.queue.size()>0){
-      this.step(defer_drawing, competitor);
+      this.step(defer_drawing, competitors);
     }
   }
   
