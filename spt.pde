@@ -16,6 +16,9 @@ Graph graph;
 ArrayList people;
 Person person1;
 Person person2;
+Person person3;
+
+HashMap popularity; //vertex_id-># of trees that have reached it
 
 float boundary=0;
 
@@ -58,6 +61,8 @@ void setup(){
     println( "done" );
   }
   
+  graph = map.toGraph();
+  
   people = new ArrayList();
   person1 = new Person( 100,100 );
   person1.setVertex();
@@ -65,10 +70,13 @@ void setup(){
   person2 = new Person( 500,500 );
   person2.setVertex();
   people.add( person2 );
+  person3 = new Person( 100, 600 );
+  person3.setVertex();
+  people.add( person3 );
   
-  graph = map.toGraph();
   person1.dijkstra = new Dijkstra( graph, person1.id );
   person2.dijkstra = new Dijkstra( graph, person2.id );
+  person3.dijkstra = new Dijkstra( graph, person3.id );
   
   background(255);
   map.draw(transx,transy,scalex,scaley);
@@ -127,6 +135,8 @@ void draw(){
     
   if(someone_moved_to_new_vertex){
       meetpoint_id=null;
+      popularity = new HashMap();
+      
       for(int i=0; i<peopleArr.length; i++){
         Person person = (Person)peopleArr[i];
         person.dijkstra = new Dijkstra( graph, person.id );

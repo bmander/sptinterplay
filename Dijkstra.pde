@@ -129,6 +129,8 @@ class Dijkstra{
     tree.put( best_edge_pq_node.sptedge.edge.tov,
               best_edge_pq_node.sptedge
             );
+            
+    //if(best_edge_pq_node.sptedge.edge.tov
               
     //draw the edge
     if( best_edge_pq_node.sptedge.edge != null ){

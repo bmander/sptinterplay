@@ -15,11 +15,9 @@ class Tile{
     
     try{
       // parse json blob
-      print("start parsing...");
       BufferedReader rd = createReader( filename );
       JSONTokener tk = new JSONTokener( rd );//new JSONTokener( datastr );
       JSONObject data = new JSONObject( tk );
-      println("done");
       
       // get tile id
       this.id = data.getString( "_id" );
