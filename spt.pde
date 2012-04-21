@@ -107,15 +107,17 @@ void draw(){
     }
   }
   
-  boolean someone_moved=false;
+  boolean someone_moved_to_new_vertex=false;
+  boolean everyone_still=true;
   for( int i=0; i<people.size(); i++){
     Person person = (Person)peopleArr[i];
     if( !person.still(0.75) ){
-      someone_moved = someone_moved || person.setVertex();
+      someone_moved_to_new_vertex = someone_moved_to_new_vertex || person.setVertex();
+      everyone_still=false;
     } 
   }
     
-  if(someone_moved){
+  if(someone_moved_to_new_vertex){
       meetpoint_id=null;
       for(int i=0; i<peopleArr.length; i++){
         Person person = (Person)peopleArr[i];
@@ -131,7 +133,7 @@ void draw(){
       }
       
       image(backdrop,0,0);
-  } else if(person1.still(0.75) && person2.still(0.75)) {
+  } else if(everyone_still) {
     for(int i=0; i<40; i++){
       boundary += 0.1;
       //println( person1.dijkstra.boundary + "vs" + person2.dijkstra.boundary );
