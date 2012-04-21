@@ -13,6 +13,7 @@ float transy;
 Map map;
 Graph graph;
 
+ArrayList people;
 Person person1;
 Person person2;
 
@@ -49,10 +50,11 @@ void setup(){
     println( "done" );
   }
   
+  people = new ArrayList();
   person1 = new Person( 100,100 );
-  person1.id="1330264333";
-  person2 = new Person( 200,100 );
-  person2.id="1330264333";
+  person1.setVertex();
+  person2 = new Person( 500,500 );
+  person2.setVertex();
   
   graph = map.toGraph();
   person1.dijkstra = new Dijkstra( graph, person1.id );
@@ -105,26 +107,14 @@ void draw(){
   boolean someone_moved=false;
       
   if( !person1.still(0.75) ){
-      
-    Point pt = person1.getGeoCoord(transx,transy,scalex,scaley);
-    String newid = map.nearest( pt ).id;
-    if(!newid.equals(person1.id)){
-      person1.id=newid;
-      
-      someone_moved=true;
-      
-    }
+    
+    someone_moved = someone_moved || person1.setVertex();
 
   } 
   
   if( !person2.still(0.75) ){
-      
-    Point pt = person2.getGeoCoord(transx,transy,scalex,scaley);
-    String newid = map.nearest( pt ).id;
-    if(!newid.equals(person2.id)){
-      person2.id=newid;
-      someone_moved=true;
-    }
+    
+    someone_moved = someone_moved || person2.setVertex();
 
   } 
     

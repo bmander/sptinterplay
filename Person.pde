@@ -20,6 +20,18 @@ class Person{
     this.dijkstra=null;
   }
   
+  boolean setVertex(){
+    //return true if there's a new vertex; false otherwise
+    
+    Point pt = this.getGeoCoord(transx,transy,scalex,scaley);
+    String newid = map.nearest( pt ).id;
+    if(!newid.equals(this.id)){
+      this.id=newid;
+      return true;
+    }
+    return false;
+  }
+  
   boolean still(float timeout){
     return ((millis()/1000.0)-this.lastmoved)>timeout;
   }
