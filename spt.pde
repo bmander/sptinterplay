@@ -23,6 +23,7 @@ PImage backdrop;
 
 String meetpoint_id=null;
 Point meetpoint=null;
+color[] colors=new color[6];
 
 void setup(){
   size(1024,1536);
@@ -35,6 +36,13 @@ void setup(){
   scaley=20000;
   transx=-71.095;
   transy=42.336;
+  
+  colors[0]=color(200,0,0);
+  colors[1]=color(0,200,0);
+  colors[2]=color(0,0,200);
+  colors[3]=color(200,200,0);
+  colors[4]=color(0,200,200);
+  colors[5]=color(200,0,200);
   
   map = new Map();
   String[] filenames = {"-71.04-42.36.json",
@@ -136,20 +144,22 @@ void draw(){
   } else if(everyone_still) {
     for(int i=0; i<40; i++){
       boundary += 0.1;
-      //println( person1.dijkstra.boundary + "vs" + person2.dijkstra.boundary );
-      person1.dijkstra.step_to(boundary,true, peopleArr);
-      person2.dijkstra.step_to(boundary,true, peopleArr);
+      for(int j=0; j<peopleArr.length; j++){
+        Person person = (Person)peopleArr[j];
+        person.dijkstra.step_to(boundary,true, peopleArr);
+      }
     }
   }
   
-  stroke(200,0,0);
-  person1.dijkstra.draw_deferred();
-  stroke(0,200,0);
-  person2.dijkstra.draw_deferred();
+  for(int i=0; i<min(peopleArr.length,colors.length); i++){
+    stroke(colors[i]);
+    ((Person)peopleArr[i]).dijkstra.draw_deferred();
+  }
   
   if(meetpoint_id != null){
-    person1.dijkstra.draw_to( meetpoint_id );
-    person2.dijkstra.draw_to( meetpoint_id );
+    for(int i=0; i<peopleArr.length;i++){
+      ((Person)peopleArr[i]).dijkstra.draw_to( meetpoint_id );
+    }
     
     stroke(0,0,255);
     fill(0,0,255);
@@ -157,6 +167,7 @@ void draw(){
   }
   
   fill(255,200,200,128);
-  person1.draw(transx,transy,scalex,scaley);
-  person2.draw(transx,transy,scalex,scaley);
+  for(int i=0; i<peopleArr.length; i++){
+    ((Person)peopleArr[i]).draw(transx,transy,scalex,scaley);
+  }
 }
