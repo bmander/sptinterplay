@@ -126,11 +126,20 @@ class Dijkstra{
       return;
     }
     
-    tree.put( best_edge_pq_node.sptedge.edge.tov,
+    String tov = best_edge_pq_node.sptedge.edge.tov;
+    
+    tree.put( tov,
               best_edge_pq_node.sptedge
             );
-            
-    //if(best_edge_pq_node.sptedge.edge.tov
+    
+    int tovppl;
+    if( !popularity.containsKey(tov) ){
+      tovppl=1;
+      popularity.put( tov, tovppl );
+    } else {
+      tovppl=((Integer)popularity.get( tov )) + 1;
+      popularity.put( tov, tovppl );
+    }
               
     //draw the edge
     if( best_edge_pq_node.sptedge.edge != null ){
@@ -160,7 +169,7 @@ class Dijkstra{
     }
     
     if(!winner){
-      if(meetpoint_id==null){
+      if(meetpoint_id==null && tovppl==people.size()){
         Edge edge = best_edge_pq_node.sptedge.edge;
         meetpoint_id=edge.tov;
         meetpoint = edge.endpoint();

@@ -47,6 +47,8 @@ void setup(){
   colors[4]=color(0,200,200);
   colors[5]=color(200,0,200);
   
+  popularity = new HashMap();
+  
   map = new Map();
   String[] filenames = {"-71.04-42.36.json",
     "-71.04-42.34.json",
