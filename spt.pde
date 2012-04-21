@@ -53,8 +53,10 @@ void setup(){
   people = new ArrayList();
   person1 = new Person( 100,100 );
   person1.setVertex();
+  people.add( person1 );
   person2 = new Person( 500,500 );
   person2.setVertex();
+  people.add( person2 );
   
   graph = map.toGraph();
   person1.dijkstra = new Dijkstra( graph, person1.id );
@@ -92,41 +94,42 @@ void draw(){
                	
   };*/
   
+  Object[] peopleArr = people.toArray();
+  
   if( mousePressed ){
     int deltax=(mouseX-pmouseX);
     int deltay=(mouseY-pmouseY);
     
-    if( person1.within( pmouseX, pmouseY )){
-      person1.move(deltax,deltay);
-    }
-    if( person2.within( pmouseX, pmouseY )){
-      person2.move(deltax,deltay);
+    for(int i=0; i<peopleArr.length; i++){
+      Person person = (Person)peopleArr[i];
+      if( person.within( pmouseX, pmouseY )){
+        person.move(deltax,deltay);
+      }
     }
   }
   
   boolean someone_moved=false;
-      
-  if( !person1.still(0.75) ){
-    
-    someone_moved = someone_moved || person1.setVertex();
-
-  } 
-  
-  if( !person2.still(0.75) ){
-    
-    someone_moved = someone_moved || person2.setVertex();
-
-  } 
+  for( int i=0; i<people.size(); i++){
+    Person person = (Person)peopleArr[i];
+    if( !person.still(0.75) ){
+      someone_moved = someone_moved || person.setVertex();
+    } 
+  }
     
   if(someone_moved){
       meetpoint_id=null;
-      person1.dijkstra = new Dijkstra( graph, person1.id );
-      person2.dijkstra = new Dijkstra( graph, person2.id );
+      for(int i=0; i<peopleArr.length; i++){
+        Person person = (Person)peopleArr[i];
+        person.dijkstra = new Dijkstra( graph, person.id );
+      }
 
       boundary=150.0;
       for(float i=0.1; i<=boundary; i+=0.1){
-        person1.dijkstra.step_to(i,true, person2.dijkstra);
-        person2.dijkstra.step_to(i,true, person1.dijkstra);
+        //for(int i=0; i<peopleArr.length; i++){
+        //  Person person = (Person)peopleArr[i];
+          person1.dijkstra.step_to(i,true, person2.dijkstra);
+          person2.dijkstra.step_to(i,true, person1.dijkstra);
+        //}
       }
       
       image(backdrop,0,0);
