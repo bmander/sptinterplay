@@ -101,7 +101,6 @@ class Dijkstra{
   void draw_to(String tov){
     SPTEdge curr = this.sptedge_to(tov);
     while(curr != null && curr.edge.way != null){
-      stroke(0,0,255);
       curr.edge.way.draw(transx,transy,scalex,scaley,5);
       curr=curr.parent;
     }

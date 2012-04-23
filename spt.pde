@@ -13,6 +13,7 @@ int BACKGROUND_COLOR=50;
 color MAP_COLOR=color(255,255,255);
 float HIGHWAY_WEIGHT=1.0;
 float STREET_WEIGHT=0.5;//0.1;
+color MEETUP_COLOR=color(255,255,255);
 
 int scalex;
 int scaley;
@@ -278,12 +279,13 @@ void draw(){
   }
   
   if(meetpoint_id != null){
+    stroke(MEETUP_COLOR);
     for(int i=0; i<peopleArr.length;i++){
       ((Person)peopleArr[i]).dijkstra.draw_to( meetpoint_id );
     }
     
-    stroke(0,0,255);
-    fill(0,0,255);
+    
+    fill(MEETUP_COLOR);
     ellipse( width-meetpoint.screeny(), height-meetpoint.screenx(), 20, 20 );
   }
   
