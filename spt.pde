@@ -111,8 +111,6 @@ class LoaderThread extends Thread {
     backdrop = loadImage("background.tif");
     
     loop();
-    //person1.draw(transx,transy,scalex,scaley);
-    //person2.draw(transx,transy,scalex,scaley);
   }
 }
 
@@ -209,7 +207,6 @@ void keyPressed(){
   
 void draw(){
   
-  //if( tilesLoaded < filenames.length ) {
   if( lt.isAlive() ){
     background(BACKGROUND_COLOR);
     text( tilesLoaded+"/"+filenames.length+" loaded", width/2-200, height/2 );
