@@ -107,7 +107,7 @@ class Dijkstra{
     }
   }
   
-  void step(boolean defer_drawing, Object[] competitors){
+  void step(boolean defer_drawing){
     if( this.queue.size()==0 ){
       return;
     }
@@ -134,40 +134,25 @@ class Dijkstra{
       popularity.put( tov, tovppl );
     }
               
-    //draw the edge
-    if( best_edge_pq_node.sptedge.edge != null ){
-      stroke(#000000);
-      best_edge_pq_node.sptedge.draw(transx,transy,scalex,scaley);
-    }
-    //trace up the tree adding the edge weight
-    SPTEdge curr = best_edge_pq_node.sptedge.parent;
-    while(curr!=null){
-      curr.addTrunkyness( best_edge_pq_node.sptedge.edgeweight );
-      if(!defer_drawing){curr.draw(transx,transy,scalex,scaley);}
-      curr=curr.parent;
+    if(tovppl==1){
+      //draw the edge
+      if( best_edge_pq_node.sptedge.edge != null ){
+        stroke(#000000);
+        best_edge_pq_node.sptedge.draw(transx,transy,scalex,scaley);
+      }
+      //trace up the tree adding the edge weight
+      SPTEdge curr = best_edge_pq_node.sptedge.parent;
+      while(curr!=null){
+        curr.addTrunkyness( best_edge_pq_node.sptedge.edgeweight );
+        if(!defer_drawing){curr.draw(transx,transy,scalex,scaley);}
+        curr=curr.parent;
+      } 
     }
     
-    //find out if any competitor has a lower weight
-    boolean winner=true;
-    if(competitors!=null){
-      for(int i=0; i<competitors.length; i++){
-        Person competitor = (Person)competitors[i];
-        if(competitor.dijkstra.equals(this)){ //this is the same as the competitor
-          continue;
-        }
-        if(best_edge_pq_node.weight > competitor.dijkstra.get_weight(best_edge_pq_node.sptedge.edge.tov)){
-          winner=false;
-        }
-      }
-    }
-    
-    if(!winner){
-      if(meetpoint_id==null && tovppl==people.size()){
-        Edge edge = best_edge_pq_node.sptedge.edge;
-        meetpoint_id=edge.tov;
-        meetpoint = edge.endpoint();
-      }
-      return;
+    if(meetpoint_id==null && tovppl==people.size()){
+      Edge edge = best_edge_pq_node.sptedge.edge;
+      meetpoint_id=edge.tov;
+      meetpoint = edge.endpoint();
     }
     
     //for each outgoing edge
@@ -205,7 +190,7 @@ class Dijkstra{
     
   }
   
-  void step_to(float boundary, boolean defer_drawing, Object[] competitors){
+  void step_to(float boundary, boolean defer_drawing){
     while(true){
       if(this.queue.size()==0){
         return;
@@ -216,7 +201,7 @@ class Dijkstra{
         return;
       }
       
-      this.step( defer_drawing, competitors );
+      this.step( defer_drawing );
     }
   }
   

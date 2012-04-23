@@ -154,7 +154,7 @@ void setup(){
 
 void keyPressed(){
   if( key==' ' ){
-    person1.dijkstra.step(false, null);
+    person1.dijkstra.step(false);
   }
 }
 
@@ -257,7 +257,7 @@ void draw(){
       for(float i=0.1; i<=boundary; i+=0.1){
         for(int j=0; j<peopleArr.length; j++){
           Person person = (Person)peopleArr[j];
-          person.dijkstra.step_to(i,true,peopleArr);
+          person.dijkstra.step_to(i,true);
         }
       }
       
@@ -267,7 +267,7 @@ void draw(){
       boundary += 0.1;
       for(int j=0; j<peopleArr.length; j++){
         Person person = (Person)peopleArr[j];
-        person.dijkstra.step_to(boundary,true, peopleArr);
+        person.dijkstra.step_to(boundary,true);
       }
     }
   }
