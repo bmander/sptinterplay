@@ -37,29 +37,9 @@ String meetpoint_id=null;
 Point meetpoint=null;
 color[] colors=new color[6];
 
-void setup(){
-  size(1024,1536);
-  
-  smooth();
-  strokeWeight(0.1);
-  ellipseMode(CENTER);
-  
-  scalex=11000;
-  scaley=15000;
-  transx=-71.15;
-  transy=42.33;
-  
-  colors[0]=color(227,82,82);//color(200,0,0);
-  colors[1]=color(82,227,82);//color(0,128,11);
-  colors[2]=color(82,82,227);//color(0,13,138);
-  colors[3]=color(227,227,82);//color(186,186,0);
-  colors[4]=color(82,227,227);//color(0,150,135);
-  colors[5]=color(227,82,227);//color(150,0,158);
-  
-  popularity = new HashMap();
-  
-  map = new Map();
-  String[] filenames = {"-71.04-42.36.json",
+int tilesLoaded=0;
+
+    String[] filenames = {"-71.04-42.36.json",
     "-71.04-42.34.json",
     "-71.04-42.32.json",
     "-71.06-42.36.json",
@@ -91,38 +71,84 @@ void setup(){
     "-71.16-42.34.json",
     "-71.16-42.36.json",
     "-71.16-42.38.json"
-  };
-  for(int i=0; i<filenames.length; i++){
-    print(i+"...");
-    map.addTile( filenames[i] );
-    println( "done" );
+    };
+
+class LoaderThread extends Thread {
+  LoaderThread(){
   }
   
-  graph = map.toGraph();
+  public void run(){
+
+    for(int i=0; i<filenames.length; i++){
+      tilesLoaded += 1;
+      map.addTile( filenames[i] );
+    }
+    
+    graph = map.toGraph();
   
+    
+    person1 = new Person( 100,100 );
+    person1.setVertex();
+    people.add( person1 );
+    person2 = new Person( 500,500 );
+    person2.setVertex();
+    people.add( person2 );
+    person3 = new Person( 100, 600 );
+    person3.setVertex();
+    people.add( person3 );
+  
+    person1.dijkstra = new Dijkstra( graph, person1.id );
+    person2.dijkstra = new Dijkstra( graph, person2.id );
+    person3.dijkstra = new Dijkstra( graph, person3.id );
+  
+    noLoop();
+    background(BACKGROUND_COLOR);
+    stroke(MAP_COLOR);
+    map.draw(transx,transy,scalex,scaley);
+    
+  
+    save("background.tif");
+    backdrop = loadImage("background.tif");
+    
+    loop();
+    //person1.draw(transx,transy,scalex,scaley);
+    //person2.draw(transx,transy,scalex,scaley);
+  }
+}
+
+PFont font;
+LoaderThread lt;
+
+void setup(){
+  size(1024,1536);
+  
+  font = loadFont("LucidaSans-TypewriterBold-60.vlw");
+  textFont(font);
+    
+  smooth();
+  strokeWeight(0.1);
+  ellipseMode(CENTER);
+  
+  scalex=11000;
+  scaley=15000;
+  transx=-71.15;
+  transy=42.33;
+  
+  colors[0]=color(227,82,82);//color(200,0,0);
+  colors[1]=color(82,227,82);//color(0,128,11);
+  colors[2]=color(82,82,227);//color(0,13,138);
+  colors[3]=color(227,227,82);//color(186,186,0);
+  colors[4]=color(82,227,227);//color(0,150,135);
+  colors[5]=color(227,82,227);//color(150,0,158);
+  
+  popularity = new HashMap();
+  
+  map = new Map();
   people = new ArrayList();
-  person1 = new Person( 100,100 );
-  person1.setVertex();
-  people.add( person1 );
-  person2 = new Person( 500,500 );
-  person2.setVertex();
-  people.add( person2 );
-  person3 = new Person( 100, 600 );
-  person3.setVertex();
-  people.add( person3 );
-  
-  person1.dijkstra = new Dijkstra( graph, person1.id );
-  person2.dijkstra = new Dijkstra( graph, person2.id );
-  person3.dijkstra = new Dijkstra( graph, person3.id );
-  
-  background(BACKGROUND_COLOR);
-  stroke(MAP_COLOR);
-  map.draw(transx,transy,scalex,scaley);
-  
-  save("background.tif");
-  backdrop = loadImage("background.tif");
-  //person1.draw(transx,transy,scalex,scaley);
-  //person2.draw(transx,transy,scalex,scaley);
+
+  lt = new LoaderThread();
+  lt.start();
+
   
   //tspsReceiver= new TSPS(this, 12000);
   
@@ -179,8 +205,18 @@ void keyPressed(){
   }
 }*/
 
+
   
 void draw(){
+  
+  //if( tilesLoaded < filenames.length ) {
+  if( lt.isAlive() ){
+    background(BACKGROUND_COLOR);
+    text( tilesLoaded+"/"+filenames.length+" loaded", width/2-200, height/2 );
+    
+    fill(0,102,153);
+    return;
+  }
   
   //tspsReceiver.update();
 
@@ -258,4 +294,5 @@ void draw(){
   for(int i=0; i<peopleArr.length; i++){
     ((Person)peopleArr[i]).draw(transx,transy,scalex,scaley);
   }
+  
 }
