@@ -1,7 +1,7 @@
 import org.json.*;
 
-//import tsps.*;
-//TSPS tspsReceiver;
+import tsps.*;
+TSPS tspsReceiver;
 
 // 1024 px/15 ft = 68 px/ft
 
@@ -88,7 +88,7 @@ void setup(){
   //person1.draw(transx,transy,scalex,scaley);
   //person2.draw(transx,transy,scalex,scaley);
   
-  //tspsReceiver= new TSPS(this, 12000);
+  tspsReceiver= new TSPS(this, 12000);
   
 }
 
@@ -98,11 +98,56 @@ void keyPressed(){
   }
 }
 
+void update_people_with_tsps(){
+  Set tsps_pids = new HashSet();
+  
+  for (Enumeration e = tspsReceiver.people.keys() ; e.hasMoreElements() ;) {
+    
+    int pid = (Integer) e.nextElement();
+    TSPSPerson tperson = (TSPSPerson) tspsReceiver.people.get(pid);
+    
+    tsps_pids.add( pid );
+    
+    //look for associated person
+    Person person = null;
+    for(int i=0; i<people.size(); i++){
+      Person cand = (Person)people.get(i);
+      if(cand.tsps_id==pid){
+        person = cand;
+      }
+    }
+    
+    if(person!=null){
+      person.update( int(tperson.centroid.x*width), int(tperson.centroid.y*height) );
+      person.draw(transx,transy,scalex,scaley);
+    } else {
+      person = new Person(int(tperson.centroid.x*width), int(tperson.centroid.y*height));
+      person.tsps_id=pid;
+      people.add( person );
+      person.draw(transx,transy,scalex,scaley);
+    }
+               	
+  };
+  
+  boolean someone_walked_out=false;
+  //look for people with no assocaited tsps_pids;
+  for(int i=0; i<people.size(); i++){
+    Person person = (Person)people.get(i);
+    if( !tsps_pids.contains( person.tsps_id ) ){
+      people.remove( i );
+      someone_walked_out=true;
+    }
+  }
+  if(someone_walked_out){
+    //image(backdrop,0,0);
+  }
+}
+
   
 void draw(){
-  /*
+  
   tspsReceiver.update();
-  for (Enumeration e = tspsReceiver.people.keys() ; e.hasMoreElements() ;) {
+  /*for (Enumeration e = tspsReceiver.people.keys() ; e.hasMoreElements() ;) {
     
     int pid = (Integer) e.nextElement();
     TSPSPerson tperson = (TSPSPerson) tspsReceiver.people.get(pid);
@@ -111,7 +156,14 @@ void draw(){
     person1.draw(transx,transy,scalex,scaley);
                	
   };*/
+  update_people_with_tsps();
+  
+  //println( people );
+  
   Object[] peopleArr = people.toArray();
+  
+  //println( "people "+people );
+  //println( "peopleArr "+peopleArr[0] );
   
   if( mousePressed ){
     int deltax=(mouseX-pmouseX);
