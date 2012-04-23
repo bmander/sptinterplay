@@ -27,7 +27,7 @@ class SPTEdge{
     this.deferred=false;
     if(this.edge!=null && this.edge.way!=null){
       //stroke(#AA0000);
-      this.edge.way.draw(transx,transy,scalex,scaley,pow(this.trunkyness*0.05,0.5));
+      this.edge.way.draw(transx,transy,scalex,scaley,pow(this.trunkyness*TRUNK_LINE_WIDTH,0.5));
     }
   }
   

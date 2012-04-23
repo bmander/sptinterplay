@@ -54,9 +54,9 @@ class Way{
   void draw(double left, double bottom, double scalex, double scaley){
     float weight;
     if( this.metadata("highway").equals("motorway") ){
-      weight=1;
+      weight=HIGHWAY_WEIGHT;
     } else{
-      weight=0.1;
+      weight=STREET_WEIGHT;
     }
     
     draw(left,bottom,scalex,scaley,weight);

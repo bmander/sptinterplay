@@ -5,6 +5,15 @@ TSPS tspsReceiver;
 
 // 1024 px/15 ft = 68 px/ft
 
+int SPT_SPEED=60;
+float TRUNK_LINE_WIDTH=0.035;
+//int BACKGROUND_COLOR=255;
+//color MAP_COLOR=color(0,0,0);
+int BACKGROUND_COLOR=50;
+color MAP_COLOR=color(255,255,255);
+float HIGHWAY_WEIGHT=1.0;
+float STREET_WEIGHT=0.5;//0.1;
+
 int scalex;
 int scaley;
 float transx;
@@ -40,12 +49,12 @@ void setup(){
   transx=-71.15;
   transy=42.33;
   
-  colors[0]=color(200,0,0);
-  colors[1]=color(0,200,0);
-  colors[2]=color(0,0,200);
-  colors[3]=color(200,200,0);
-  colors[4]=color(0,200,200);
-  colors[5]=color(200,0,200);
+  colors[0]=color(227,82,82);//color(200,0,0);
+  colors[1]=color(0,128,11);
+  colors[2]=color(0,13,138);
+  colors[3]=color(186,186,0);
+  colors[4]=color(0,150,135);
+  colors[5]=color(150,0,158);
   
   popularity = new HashMap();
   
@@ -106,7 +115,8 @@ void setup(){
   person2.dijkstra = new Dijkstra( graph, person2.id );
   person3.dijkstra = new Dijkstra( graph, person3.id );
   
-  background(255);
+  background(BACKGROUND_COLOR);
+  stroke(MAP_COLOR);
   map.draw(transx,transy,scalex,scaley);
   
   save("background.tif");
@@ -232,7 +242,7 @@ void draw(){
       
       image(backdrop,0,0);
   } else if(everyone_still) {
-    for(int i=0; i<40; i++){
+    for(int i=0; i<SPT_SPEED; i++){
       boundary += 0.1;
       for(int j=0; j<peopleArr.length; j++){
         Person person = (Person)peopleArr[j];
