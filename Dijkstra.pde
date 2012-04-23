@@ -115,10 +115,7 @@ class Dijkstra{
     DjQueueNode best_edge_pq_node = (DjQueueNode)this.queue.peek();
     this.queue.remove();
         
-    //println( "best edge from "+best_edge_pq_node.edge.orig+" to "+best_edge_pq_node.edge.dest+"("+best_edge_pq_node.weight+")" );
     if( tree.containsKey( best_edge_pq_node.sptedge.edge.tov ) ){
-      //println( "already found a better route" );
-      //println( "---" );
       return;
     }
     
