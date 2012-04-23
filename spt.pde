@@ -1,7 +1,7 @@
 import org.json.*;
 
-import tsps.*;
-TSPS tspsReceiver;
+//import tsps.*;
+//TSPS tspsReceiver;
 
 // 1024 px/15 ft = 68 px/ft
 
@@ -50,11 +50,11 @@ void setup(){
   transy=42.33;
   
   colors[0]=color(227,82,82);//color(200,0,0);
-  colors[1]=color(0,128,11);
-  colors[2]=color(0,13,138);
-  colors[3]=color(186,186,0);
-  colors[4]=color(0,150,135);
-  colors[5]=color(150,0,158);
+  colors[1]=color(82,227,82);//color(0,128,11);
+  colors[2]=color(82,82,227);//color(0,13,138);
+  colors[3]=color(227,227,82);//color(186,186,0);
+  colors[4]=color(82,227,227);//color(0,150,135);
+  colors[5]=color(227,82,227);//color(150,0,158);
   
   popularity = new HashMap();
   
@@ -124,7 +124,7 @@ void setup(){
   //person1.draw(transx,transy,scalex,scaley);
   //person2.draw(transx,transy,scalex,scaley);
   
-  tspsReceiver= new TSPS(this, 12000);
+  //tspsReceiver= new TSPS(this, 12000);
   
 }
 
@@ -134,7 +134,7 @@ void keyPressed(){
   }
 }
 
-void update_people_with_tsps(){
+/*void update_people_with_tsps(){
   Set tsps_pids = new HashSet();
   
   for (Enumeration e = tspsReceiver.people.keys() ; e.hasMoreElements() ;) {
@@ -177,29 +177,17 @@ void update_people_with_tsps(){
   if(someone_walked_out){
     //image(backdrop,0,0);
   }
-}
+}*/
 
   
 void draw(){
   
-  tspsReceiver.update();
-  /*for (Enumeration e = tspsReceiver.people.keys() ; e.hasMoreElements() ;) {
-    
-    int pid = (Integer) e.nextElement();
-    TSPSPerson tperson = (TSPSPerson) tspsReceiver.people.get(pid);
-    
-    person1.update( int(tperson.centroid.x*width), int(tperson.centroid.y*height) );
-    person1.draw(transx,transy,scalex,scaley);
-               	
-  };*/
-  update_people_with_tsps();
-  
-  //println( people );
+  //tspsReceiver.update();
+
+  //update_people_with_tsps();
   
   Object[] peopleArr = people.toArray();
   
-  //println( "people "+people );
-  //println( "peopleArr "+peopleArr[0] );
   
   if( mousePressed ){
     int deltax=(mouseX-pmouseX);
