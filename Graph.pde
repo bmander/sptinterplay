@@ -40,10 +40,14 @@ class Edge{
   }
   
   Point endpoint(){
+    if(fromv!=null && way!=null){
     if(fromv.equals(way.fromv)){
       return (Point)this.way.loc.get(this.way.loc.size()-1);
     } else {
       return (Point)this.way.loc.get(0);
+    }
+    } else {
+      return null;
     }
   }
 }

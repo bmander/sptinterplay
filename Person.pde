@@ -55,10 +55,10 @@ class Person{
   }
   
   void draw(float transx,float transy,float scalex,float scaley){
-    strokeWeight(2);
-    stroke(255);
-    noFill();
-    ellipse(x,y,r*2,r*2);
+    //strokeWeight(2);
+    //stroke(255);
+    //noFill();
+    //ellipse(x,y,r*2,r*2);
   }
   
   boolean within(int x,int y){

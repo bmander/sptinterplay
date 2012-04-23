@@ -1,7 +1,7 @@
 import org.json.*;
 
-//import tsps.*;
-//TSPS tspsReceiver;
+import tsps.*;
+TSPS tspsReceiver;
 
 // 1024 px/15 ft = 68 px/ft
 
@@ -14,6 +14,7 @@ color MAP_COLOR=color(255,255,255);
 float HIGHWAY_WEIGHT=1.0;
 float STREET_WEIGHT=0.5;//0.1;
 color MEETUP_COLOR=color(255,255,255);
+float INIT_BOUNDARY=200.0;
 
 int scalex;
 int scaley;
@@ -149,7 +150,7 @@ void setup(){
   lt.start();
 
   
-  //tspsReceiver= new TSPS(this, 12000);
+  tspsReceiver= new TSPS(this, 12000);
   
 }
 
@@ -159,7 +160,7 @@ void keyPressed(){
   }
 }
 
-/*void update_people_with_tsps(){
+void update_people_with_tsps(){
   Set tsps_pids = new HashSet();
   
   for (Enumeration e = tspsReceiver.people.keys() ; e.hasMoreElements() ;) {
@@ -202,7 +203,7 @@ void keyPressed(){
   if(someone_walked_out){
     //image(backdrop,0,0);
   }
-}*/
+}
 
 
   
@@ -216,9 +217,9 @@ void draw(){
     return;
   }
   
-  //tspsReceiver.update();
+  tspsReceiver.update();
 
-  //update_people_with_tsps();
+  update_people_with_tsps();
   
   Object[] peopleArr = people.toArray();
   
@@ -254,7 +255,7 @@ void draw(){
         person.dijkstra = new Dijkstra( graph, person.id );
       }
 
-      boundary=150.0;
+      boundary=INIT_BOUNDARY;
       for(float i=0.1; i<=boundary; i+=0.1){
         for(int j=0; j<peopleArr.length; j++){
           Person person = (Person)peopleArr[j];
@@ -278,7 +279,7 @@ void draw(){
     ((Person)peopleArr[i]).dijkstra.draw_deferred();
   }
   
-  if(meetpoint_id != null){
+  if(meetpoint_id != null && meetpoint !=null){
     stroke(MEETUP_COLOR);
     for(int i=0; i<peopleArr.length;i++){
       ((Person)peopleArr[i]).dijkstra.draw_to( meetpoint_id );
