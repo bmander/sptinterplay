@@ -109,13 +109,14 @@ class Dijkstra{
     }
   }
   
+  //returns true if exited because of boundary limit
   void step(boolean defer_drawing, Object[] competitors){
     if( this.queue.size()==0 ){
       return;
     }
     
-    DjQueueNode best_edge_pq_node = (DjQueueNode)this.queue.remove();
-
+    DjQueueNode best_edge_pq_node = (DjQueueNode)this.queue.peek();
+    this.queue.remove();
     
     this.boundary=best_edge_pq_node.weight;
     
@@ -213,8 +214,17 @@ class Dijkstra{
   }
   
   void step_to(float boundary, boolean defer_drawing, Object[] competitors){
-    while(boundary > this.boundary && this.queue.size()>0){
-      this.step(defer_drawing, competitors);
+    while(true){
+      if(this.queue.size()==0){
+        return;
+      }
+      
+      DjQueueNode best_edge_pq_node = (DjQueueNode)this.queue.peek();
+      if(best_edge_pq_node.weight > boundary){
+        return;
+      }
+      
+      this.step( defer_drawing, competitors );
     }
   }
   

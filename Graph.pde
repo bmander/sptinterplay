@@ -25,7 +25,10 @@ class Edge{
   }
   
   String toString(){
-    return "["+this.fromv+" -("+this.weight()+")-> "+this.tov+"]";
+    if(this.way!=null)
+      return "["+this.fromv+" -("+this.weight()+")-> "+this.tov+"]";
+    else
+      return "["+this.fromv+" -(null)-> "+this.tov+"]";
   }
   
   Point startpoint(){

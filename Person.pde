@@ -55,8 +55,9 @@ class Person{
   }
   
   void draw(float transx,float transy,float scalex,float scaley){
-    strokeWeight(1);
-    stroke(0);
+    strokeWeight(2);
+    stroke(255);
+    noFill();
     ellipse(x,y,r*2,r*2);
   }
   
