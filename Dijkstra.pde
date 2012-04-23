@@ -67,7 +67,6 @@ class Dijkstra{
   PriorityQueue queue;
   boolean running;
   HashMap tree;
-  float boundary;
   
   Dijkstra(Graph graph, String startnode){
     this.graph = graph;
@@ -75,7 +74,6 @@ class Dijkstra{
     this.queue = new PriorityQueue();
     this.running = false;
     this.tree = new HashMap();
-    this.boundary=0;
     
     this.queue.add( 
       new DjQueueNode( 
@@ -109,7 +107,6 @@ class Dijkstra{
     }
   }
   
-  //returns true if exited because of boundary limit
   void step(boolean defer_drawing, Object[] competitors){
     if( this.queue.size()==0 ){
       return;
@@ -117,9 +114,7 @@ class Dijkstra{
     
     DjQueueNode best_edge_pq_node = (DjQueueNode)this.queue.peek();
     this.queue.remove();
-    
-    this.boundary=best_edge_pq_node.weight;
-    
+        
     //println( "best edge from "+best_edge_pq_node.edge.orig+" to "+best_edge_pq_node.edge.dest+"("+best_edge_pq_node.weight+")" );
     if( tree.containsKey( best_edge_pq_node.sptedge.edge.tov ) ){
       //println( "already found a better route" );
